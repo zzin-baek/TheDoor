@@ -1,11 +1,5 @@
 #pragma once
-#include <iostream>
-#include <time.h>
-#include <Windows.h>
-#include <string>
-#include <conio.h>
-
-using namespace std;
+#include "header.h"
 
 class BackGround
 {
@@ -173,16 +167,5 @@ public:
 	}
 
 	int getPixelColor(int x, int y) { return room_first[x][y]; }
-	void TextColor(int font, int backGround)
-	{
-		int Color = font + backGround * 16;
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Color);
-	}
-
-	void gotoxy(int x, int y)
-	{
-		COORD pos = { x,y };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-	}
+	
 };
-

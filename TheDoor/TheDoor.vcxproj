@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="header.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="MiniGames.cpp" />
     <ClCompile Include="StartScreen.cpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="header.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="MiniGames.h" />
     <ClInclude Include="StartScreen.h" />

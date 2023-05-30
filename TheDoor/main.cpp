@@ -1,30 +1,17 @@
-#include "BackGround.h"
-#include "Charactor.h"
-#include "StartScreen.h"
-
-using namespace std;
-
+#include "MainGame.h"
 
 void main()
 {
-	int x = 0;
-	int y = 0;
-	system("mode con: cols=90 lines=45");
+	int start = 0;
 	
-	BackGround* bg = new BackGround;
+	MainGame mg;
 
-	while (1)
+	mg.init();
+	start = mg.mainMenu();
+	if (start == 35)
 	{
-		bg->showBg(2, x, y);
-		Sleep(100);
-		x++;
+		mg.gameStart();
 	}
-
-	//Charactor* ch = new Charactor;
-
-	delete bg;
-	//delete ch;
-	
-	//StartScreen sc;
-
+	else
+		exit(0);
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "BackGround.h"
+#include "header.h"
 
 class MiniGames
 {
