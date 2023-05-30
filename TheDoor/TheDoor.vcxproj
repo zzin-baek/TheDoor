@@ -21,12 +21,16 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="MiniGames.cpp" />
     <ClCompile Include="StartScreen.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="MiniGames.h" />
     <ClInclude Include="StartScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
