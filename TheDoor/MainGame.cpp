@@ -32,6 +32,7 @@ MainGame::~MainGame()
 
 void MainGame::init()
 {
+	init_buffer();
 	system("mode con: cols=90 lines=45 | title ´õ µµ¾î ");
 
 	console.hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -116,9 +117,14 @@ void MainGame::stageOne()
 	ClearScreen();
 	bg->showBg(1, x, 0);
 	ch->showChar_front(x);
+	//render();
+	char chBuf[90*40] = { 0, };
+	COORD coord{ 0,0 };
+	DWORD dw = 0;
 
 	while (1)
 	{
+		//render();
 		if (_kbhit())
 		{
 			int key = _getch();
@@ -166,11 +172,31 @@ void MainGame::stageOne()
 			{
 				if (ch->getX() > 34 && ch->getX() < 40)
 				{
-					mg->miniGame1();
+					if (mg->getGameClear())
+						mg->showClue1();
+					else
+					{
+						mg->showMaze();
+						if (mg->miniGame1())
+							mg->setGameClear(true);
+					}
 				}
 				else if (ch->getX() == 55)
 					mg->showStatue();
+
+				else if (ch->getX() == 65)
+					mg->showBox();
 			}
+			/*
+			memset(chBuf, 0, sizeof(chBuf));
+			int nLen = sprintf_s(chBuf, sizeof(chBuf), "¡á");
+			SetConsoleCursorPosition(console.hBuffer[console.nCurBuffer], coord);
+			WriteFile(console.hBuffer[console.nCurBuffer], chBuf, nLen, &dw, NULL);
+
+			ClearScreen();
+			BufferFlip();
+			Sleep(1);
+			*/
 		}
 	}
 }

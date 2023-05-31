@@ -67,8 +67,9 @@ public:
 				if (charactor[i][j] < 0)
 					TextColor(bg->getPixelColor(_posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(_posY + i, x + (_posX + 2 * j) / 2));
 				else TextColor(charactor[i][j], charactor[i][j]);
+				
 				printf("бс");
-
+				//drawBackBuffer(_posY + i, _posX + 2 * j, "\033[0;36m""бс");
 			}
 			cout << endl;
 		}
@@ -86,12 +87,12 @@ public:
 		{
 			for (int j = 0; j < 12; j++)
 			{
-				gotoxy(_posX + 2 * j, _posY + i);
+				gotoxy((_posX) + 2 * j, _posY + i);
 				if (charactor[i][11 - j] < 0)
 					TextColor(bg->getPixelColor(_posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(_posY + i, x + (_posX + 2 * j) / 2));
 				else TextColor(charactor[i][11-j], charactor[i][11-j]);
 				printf("бс");
-
+				//drawBackBuffer(_posY + i, _posX + 3 * j, "\033[0;36m""бс");
 			}
 			cout << endl;
 		}

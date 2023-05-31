@@ -1,6 +1,10 @@
 #pragma once
 #include "header.h"
 
+void init_buffer();
+void drawBackBuffer(const int i, const int j, const char* dot);
+void render();
+
 class BackGround
 {
 private:
@@ -162,10 +166,12 @@ public:
 				{
 					TextColor(8, bg[i][x + j]);
 					printf("в╦");
+					//drawBackBuffer(i, 2 * j, "\033[0;36m" "бс");
 				}
 				else {
 					TextColor(bg[i][x + j], bg[i][x + j]);
 					printf("бс");
+					//drawBackBuffer(i, 2 * j,"\033[0;36m" "бс");
 				}
 			}
 			cout << endl;
