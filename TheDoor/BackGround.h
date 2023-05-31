@@ -132,9 +132,16 @@ private:
 	8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,4,4,4,4,4,4,4,4,4,4,8,8,8,
 
 	};
+
+	int _x = 0;
+	int _y = 0;
 public:
 	BackGround();
 	~BackGround();
+
+	void setX(int x) { _x = x; }
+	int getX() { return _x; }
+
 
 	void showBg(int roomNum, int x, int y)
 	{
@@ -151,7 +158,7 @@ public:
 			for (int j = 0; j < 45; j++)
 			{
 				gotoxy(2 * j, i);
-				if (roomNum == 1 && bg[i][x+j] == 0)
+				if (roomNum == 1 && bg[i][x + j] == 0)
 				{
 					TextColor(8, bg[i][x + j]);
 					printf("¢Ë");

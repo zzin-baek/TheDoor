@@ -7,6 +7,7 @@ void main()
 	MainGame mg;
 
 	mg.init();
+
 	start = mg.mainMenu();
 	if (start == 35)
 	{
