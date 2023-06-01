@@ -42,8 +42,8 @@ private:
 		-1,-1,0,7,7,0,-1,0,0,0,-1,-1,
 	};
 
-	int _posX = 15;
-	int _posY = 25;
+	int _posX;
+	int _posY;
 	bool walk = false;
 
 	BackGround* bg = new BackGround;
@@ -88,7 +88,7 @@ public:
 		{
 			for (int j = 0; j < 12; j++)
 			{
-				gotoxy((_posX) + 2 * j, _posY + i);
+				gotoxy(_posX + 2 * j, _posY + i);
 				if (charactor[i][11 - j] < 0)
 					TextColor(bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2));
 				else TextColor(charactor[i][11-j], charactor[i][11-j]);

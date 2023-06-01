@@ -10,6 +10,7 @@ MainGame::MainGame()
 
 	room1 = new Room1;
 	room2 = new Room2;
+	room3 = new Room3;
 	inven = new Inventory;
 }
 
@@ -20,6 +21,7 @@ MainGame::~MainGame()
 	delete ss;
 	delete room1;
 	delete room2;
+	delete room3;
 	delete inven;
 
 	if (console.hBuffer[0] != nullptr)
@@ -119,6 +121,7 @@ void MainGame::stageOne()
 {
 	int x = 0;
 	ClearScreen();
+	ch->setXY(15, 25);
 	bg->showBg(1, x, 0);
 	ch->showChar_front(1, x);
 	//render();
@@ -183,11 +186,17 @@ void MainGame::stageOne()
 					{
 						room1->showMaze();
 						if (room1->miniGame1())
+						{
 							room1->setGameClear(true);
+							message("그림이 바뀌었다…");
+						}
 					}
 				}
 				else if (x > 32 && x < 39)
+				{
 					room1->showStatue();
+					message("눈에서 피가 흐른다…");
+				}
 
 				else if (x > 60 && x < 72)
 					room1->showBox();
@@ -276,11 +285,13 @@ void MainGame::stageTwo()
 			}
 			else if (key == 32)
 			{
-				if (x > 5 && x < 13)
+				if (x > 11 && x < 15)
+				{
 					room2->showClock();
+					message("시계가 12시 25분을 가리키고 있다…");
+				}
 				else if (x > 39 && x < 46)
-					room1->showStatue();
-
+					room2->showCandle();
 				else if (x > 68 && x < 72)
 					room2->showRullet();
 			}
@@ -323,9 +334,7 @@ void MainGame::stageThree()
 				{
 					if (ch->getX() > 65)
 						continue;
-					else if (ch->getX() > 75)
-						ch->setXY(ch->getX() + 1, ch->getY());
-					else if (x > 74)
+					else if (x > 54)
 						ch->setXY(ch->getX() + 1, ch->getY());
 					else if (ch->getX() > 30)
 						x += 1;
@@ -358,22 +367,13 @@ void MainGame::stageThree()
 			}
 			else if (key == 32)
 			{
-				if (ch->getX() > 34 && ch->getX() < 40)
+				if (x > 12 && x < 18)
 				{
-					if (room1->getGameClear())
-						room1->showClue1();
-					else
-					{
-						room1->showMaze();
-						if (room1->miniGame1())
-							room1->setGameClear(true);
-					}
+					room3->showArcade();
 				}
-				else if (ch->getX() == 55)
-					room1->showStatue();
+				else if (x > 45)
+					room3->showLocker();
 
-				else if (ch->getX() == 65)
-					room1->showBox();
 			}
 			else if (key == 27)
 			{
@@ -382,14 +382,27 @@ void MainGame::stageThree()
 				key = _getch();
 				if (key == 27)
 				{
-					bg->showBg(2, x, 0);
-					ch->showChar_front(2, x);
+					bg->showBg(3, x, 0);
+					ch->showChar_front(3, x);
 				}
 			}
 			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
 				break;
 		}
 	}
+}
+
+void MainGame::message(std::string str)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		gotoxy(6, 30 + i);
+		TextColor(15, 0);
+		printf("%s", msg[i]);
+	}
+
+	gotoxy(10, 33);
+	printf("%s", str.c_str());
 }
 
 void MainGame::gameStart()

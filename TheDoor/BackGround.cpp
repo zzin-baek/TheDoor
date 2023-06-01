@@ -1,6 +1,8 @@
 #include "BackGround.h"
+
 char front_buffer[40][90];
 char back_buffer[40][90];
+
 BackGround::BackGround()
 {
 }

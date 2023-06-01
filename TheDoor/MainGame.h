@@ -5,6 +5,7 @@
 #include "StartScreen.h"
 #include "Room1.h"
 #include "Room2.h"
+#include "Room3.h"
 #include "Inventory.h"
 
 #define		WIDTH		90
@@ -45,8 +46,19 @@ private:
 	StartScreen* ss;
 	Room1* room1;
 	Room2* room2;
+	Room3* room3;
 
 	Inventory* inven;
+
+	const char* msg[MAXCHAR] = {
+		"旨收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收旬 ",
+		"早                                                                            早 ",
+		"早                                                                            早 ",
+		"早                                                                            早 ",
+		"早                                                                            早 ",
+		"早                                                                            早 ",
+		"早                                                                            早 ",
+		"曲收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收旭 ", };
 
 public:
 	MainGame();
@@ -57,10 +69,10 @@ public:
 	void stageOne();
 	void stageTwo();
 	void stageThree();
+	void message(std::string str);
 
 	void gameStart();
 
 	void ClearScreen();
 	void BufferFlip();
 };
-
