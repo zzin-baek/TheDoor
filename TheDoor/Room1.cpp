@@ -1,13 +1,13 @@
-#include "MiniGames.h"
+#include "Room1.h"
 
-int MiniGames::miniGame1()
+int Room1::miniGame1()
 {
 	int startX = 25;
 	int startY = 4;
 	int posX, posY;
 	gotoxy(18 + startY, 3 + startX);
-	TextColor(5, 7);
-	printf("бс");
+	TextColor(6, 4);
+	printf("б┌");
 	posX = 18 + startY;
 	posY = 3 + startX;
 	while (!_kbhit())
@@ -31,8 +31,8 @@ int MiniGames::miniGame1()
 					printf("  ");
 
 					gotoxy(posX, 3 + startX - 1);
-					TextColor(5, 7);
-					printf("бс");
+					TextColor(6, 7);
+					printf("б┌");
 
 					posY -= 1;
 					startX -= 1;
@@ -46,8 +46,8 @@ int MiniGames::miniGame1()
 					printf("  ");
 
 					gotoxy(posX, 3 + startX + 1);
-					TextColor(5, 7);
-					printf("бс");
+					TextColor(6, 7);
+					printf("б┌");
 
 					posY += 1;
 					startX += 1;
@@ -61,8 +61,8 @@ int MiniGames::miniGame1()
 					printf("  ");
 
 					gotoxy(18 + (startY * 2) - 2, 3 + startX);
-					TextColor(5, 7);
-					printf("бс");
+					TextColor(6, 7);
+					printf("б┌");
 
 					posX = 18 + (startY * 2) - 2;
 					startY += 1;
@@ -76,8 +76,8 @@ int MiniGames::miniGame1()
 					printf("  ");
 
 					gotoxy(18 + (startY * 2) - 6, 3 + startX);
-					TextColor(5, 7);
-					printf("бс");
+					TextColor(6, 7);
+					printf("б┌");
 
 					posX = 18 + (startY* 2) - 6;
 					startY -= 1;
@@ -85,6 +85,8 @@ int MiniGames::miniGame1()
 				break;
 			}
 		}
+		else if (key == 27)
+			return 0;
 		else if (key == 114)
 		{
 			showMaze();
@@ -95,11 +97,10 @@ int MiniGames::miniGame1()
 			posY = 3 + startX;
 
 			gotoxy(posX, posY);
-			TextColor(5, 7);
-			printf("бс");
+			TextColor(6, 4);
+			printf("б┌");
 		}
-		else if (key == 27)
-			return 0;
+		
 		
 	}
 }

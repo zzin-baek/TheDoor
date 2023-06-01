@@ -8,7 +8,9 @@ MainGame::MainGame()
 	ch = new Charactor;
 	ss = new StartScreen;
 
-	mg = new MiniGames;
+	room1 = new Room1;
+	room2 = new Room2;
+	inven = new Inventory;
 }
 
 MainGame::~MainGame()
@@ -16,7 +18,9 @@ MainGame::~MainGame()
 	delete bg;
 	delete ch;
 	delete ss;
-	delete mg;
+	delete room1;
+	delete room2;
+	delete inven;
 
 	if (console.hBuffer[0] != nullptr)
 	{
@@ -116,7 +120,7 @@ void MainGame::stageOne()
 	int x = 0;
 	ClearScreen();
 	bg->showBg(1, x, 0);
-	ch->showChar_front(x);
+	ch->showChar_front(1, x);
 	//render();
 	char chBuf[90*40] = { 0, };
 	COORD coord{ 0,0 };
@@ -129,64 +133,78 @@ void MainGame::stageOne()
 		{
 			int key = _getch();
 
-			// 벽쪽으로 갈때 움직임 처리 구현하기(내일의 내가,,222)
 			if (key == 224)
 			{
 				key = _getch();
 				if (key == RIGHT)
 				{
-					if (ch->getX() > 105)
+					if (ch->getX() > 65)
 						continue;
-					else if (ch->getX() > 90)
-						ch->setXY(ch->getX() + 1, ch->getY());
+					else if (ch->getX() > 75)
+						ch->setXY(ch->getX() + 1, ch->getY());		
+					else if (x > 74)
+						ch->setXY(ch->getX() + 1, ch->getY());			
 					else if (ch->getX() > 30)
-					{
-						ch->setXY(ch->getX() + 1, ch->getY());
 						x += 1;
-					}
 					else
 						ch->setXY(ch->getX() + 1, ch->getY());
 
+					ch->setWalk(!ch->getWalk());
 					bg->showBg(1, x, 0);
-					ch->showChar_front(x);
+					ch->showChar_front(1, x);
 
 				}
 				else if (key == LEFT)
 				{
 					if (ch->getX() < 0)
 						continue;
-					else if (ch->getX() < 32)
+					else if (ch->getX() > 30)
 						ch->setXY(ch->getX() - 1, ch->getY());
-					else
-					{
+					else if (x == 0)
 						ch->setXY(ch->getX() - 1, ch->getY());
+					else if (ch->getX() == 30)
 						x -= 1;
-					}
+					else
+						ch->setXY(ch->getX() - 1, ch->getY());
+					
+					ch->setWalk(!ch->getWalk());
 					bg->showBg(1, x, 0);
-					ch->showChar_back(x);
+					ch->showChar_back(1, x);
 				}
-
-				printf("%d", ch->getX());
+				printf("%d %d", ch->getX(), x);
 			}
 			else if (key == 32)
 			{
-				if (ch->getX() > 34 && ch->getX() < 40)
+				if (x > 5 && x < 13)
 				{
-					if (mg->getGameClear())
-						mg->showClue1();
+					if (room1->getGameClear())
+						room1->showClue1();
 					else
 					{
-						mg->showMaze();
-						if (mg->miniGame1())
-							mg->setGameClear(true);
+						room1->showMaze();
+						if (room1->miniGame1())
+							room1->setGameClear(true);
 					}
 				}
-				else if (ch->getX() == 55)
-					mg->showStatue();
+				else if (x > 32 && x < 39)
+					room1->showStatue();
 
-				else if (ch->getX() == 65)
-					mg->showBox();
+				else if (x > 60 && x < 72)
+					room1->showBox();
 			}
+			else if (key == 27)
+			{
+				ClearScreen();
+				inven->invenUI();
+				key = _getch();
+				if (key == 27)
+				{
+					bg->showBg(1, x, 0);
+					ch->showChar_front(1, x);
+				}
+			}
+			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
+				break;
 			/*
 			memset(chBuf, 0, sizeof(chBuf));
 			int nLen = sprintf_s(chBuf, sizeof(chBuf), "■");
@@ -203,15 +221,182 @@ void MainGame::stageOne()
 
 void MainGame::stageTwo()
 {
+	int x = 0;
+	ch->setXY(15, 25);
+	ClearScreen();
+	bg->showBg(2, x, 0);
+	ch->showChar_front(2, x);
+	
+	while (1)
+	{
+		//render();
+		if (_kbhit())
+		{
+			int key = _getch();
+
+			if (key == 224)
+			{
+				key = _getch();
+				if (key == RIGHT)
+				{
+					if (ch->getX() > 65)
+						continue;
+					else if (ch->getX() > 75)
+						ch->setXY(ch->getX() + 1, ch->getY());
+					else if (x > 74)
+						ch->setXY(ch->getX() + 1, ch->getY());
+					else if (ch->getX() > 30)
+						x += 1;
+					else
+						ch->setXY(ch->getX() + 1, ch->getY());
+
+					ch->setWalk(!ch->getWalk());
+					bg->showBg(2, x, 0);
+					ch->showChar_front(2, x);
+
+				}
+				else if (key == LEFT)
+				{
+					if (ch->getX() < 0)
+						continue;
+					else if (ch->getX() > 30)
+						ch->setXY(ch->getX() - 1, ch->getY());
+					else if (x == 0)
+						ch->setXY(ch->getX() - 1, ch->getY());
+					else if (ch->getX() == 30)
+						x -= 1;
+					else
+						ch->setXY(ch->getX() - 1, ch->getY());
+
+					ch->setWalk(!ch->getWalk());
+					bg->showBg(2, x, 0);
+					ch->showChar_back(2, x);
+				}
+				printf("%d %d", ch->getX(), x);
+			}
+			else if (key == 32)
+			{
+				if (x > 5 && x < 13)
+					room2->showClock();
+				else if (x > 39 && x < 46)
+					room1->showStatue();
+
+				else if (x > 68 && x < 72)
+					room2->showRullet();
+			}
+			else if (key == 27)
+			{
+				ClearScreen();
+				inven->invenUI();
+				key = _getch();
+				if (key == 27)
+				{
+					bg->showBg(2, x, 0);
+					ch->showChar_front(2, x);
+				}
+			}
+			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
+				break;
+		}
+	}
 }
 
 void MainGame::stageThree()
 {
+	int x = 0;
+	ch->setXY(15, 25);
+	ClearScreen();
+	bg->showBg(3, x, 0);
+	ch->showChar_front(3, x);
+
+	while (1)
+	{
+		//render();
+		if (_kbhit())
+		{
+			int key = _getch();
+
+			if (key == 224)
+			{
+				key = _getch();
+				if (key == RIGHT)
+				{
+					if (ch->getX() > 65)
+						continue;
+					else if (ch->getX() > 75)
+						ch->setXY(ch->getX() + 1, ch->getY());
+					else if (x > 74)
+						ch->setXY(ch->getX() + 1, ch->getY());
+					else if (ch->getX() > 30)
+						x += 1;
+					else
+						ch->setXY(ch->getX() + 1, ch->getY());
+
+					ch->setWalk(!ch->getWalk());
+					bg->showBg(3, x, 0);
+					ch->showChar_front(3, x);
+
+				}
+				else if (key == LEFT)
+				{
+					if (ch->getX() < 0)
+						continue;
+					else if (ch->getX() > 30)
+						ch->setXY(ch->getX() - 1, ch->getY());
+					else if (x == 0)
+						ch->setXY(ch->getX() - 1, ch->getY());
+					else if (ch->getX() == 30)
+						x -= 1;
+					else
+						ch->setXY(ch->getX() - 1, ch->getY());
+
+					ch->setWalk(!ch->getWalk());
+					bg->showBg(3, x, 0);
+					ch->showChar_back(3, x);
+				}
+				printf("%d %d", ch->getX(), x);
+			}
+			else if (key == 32)
+			{
+				if (ch->getX() > 34 && ch->getX() < 40)
+				{
+					if (room1->getGameClear())
+						room1->showClue1();
+					else
+					{
+						room1->showMaze();
+						if (room1->miniGame1())
+							room1->setGameClear(true);
+					}
+				}
+				else if (ch->getX() == 55)
+					room1->showStatue();
+
+				else if (ch->getX() == 65)
+					room1->showBox();
+			}
+			else if (key == 27)
+			{
+				ClearScreen();
+				inven->invenUI();
+				key = _getch();
+				if (key == 27)
+				{
+					bg->showBg(2, x, 0);
+					ch->showChar_front(2, x);
+				}
+			}
+			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
+				break;
+		}
+	}
 }
 
 void MainGame::gameStart()
 {
 	stageOne();
+	stageTwo();
+	stageThree();
 }
 
 void MainGame::ClearScreen()

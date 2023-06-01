@@ -22,8 +22,11 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
     <ClCompile Include="header.cpp" />
+    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="MainGame.cpp" />
-    <ClCompile Include="MiniGames.cpp" />
+    <ClCompile Include="Room1.cpp" />
+    <ClCompile Include="Room2.cpp" />
     <ClCompile Include="StartScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -31,8 +34,11 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
     <ClInclude Include="header.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MainGame.h" />
-    <ClInclude Include="MiniGames.h" />
+    <ClInclude Include="Room1.h" />
+    <ClInclude Include="Room2.h" />
     <ClInclude Include="StartScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

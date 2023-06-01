@@ -4,6 +4,8 @@
 #include <Windows.h>
 #include <string>
 #include <conio.h>
+#include <string>
+#include <map>
 
 using namespace std;
 

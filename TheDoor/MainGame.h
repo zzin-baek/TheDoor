@@ -3,7 +3,9 @@
 #include "BackGround.h"
 #include "Charactor.h"
 #include "StartScreen.h"
-#include "MiniGames.h"
+#include "Room1.h"
+#include "Room2.h"
+#include "Inventory.h"
 
 #define		WIDTH		90
 #define		HEIGHT		40
@@ -41,7 +43,10 @@ private:
 	BackGround* bg;
 	Charactor* ch;
 	StartScreen* ss;
-	MiniGames* mg;
+	Room1* room1;
+	Room2* room2;
+
+	Inventory* inven;
 
 public:
 	MainGame();
