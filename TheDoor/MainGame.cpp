@@ -113,8 +113,7 @@ int MainGame::mainMenu()
 			return cursor;
 		}
 	}
-
-
+	return 0;
 }
 
 void MainGame::stageOne()
@@ -199,7 +198,37 @@ void MainGame::stageOne()
 				}
 
 				else if (x > 60 && x < 72)
+				{
 					room1->showBox();
+					message("_ _ _ _");
+				}
+				else if (ch->getX() > 60 && ch->getX() < 65)
+				{
+					if (inven->getHasKey())
+					{
+						message("열쇠를 사용하여 문을 열까? (Y: 예 / N: 아니오)");
+						while (!_kbhit())
+						{
+							key = _getch();
+							if (key == 89 || key == 121)
+							{
+								message("열쇠를 사용하여 문을 열었다");
+								Sleep(1000);
+								return;
+							}
+							else if (key == 78 || key == 110)
+								break;
+						}
+						continue;
+					}
+					else
+					{
+						message("열쇠가 필요한 것 같다…");
+						Sleep(2000);
+						bg->showBg(1, x, 0);
+						ch->showChar_front(1, x);
+					}
+				}
 			}
 			else if (key == 27)
 			{
@@ -220,10 +249,12 @@ void MainGame::stageOne()
 			SetConsoleCursorPosition(console.hBuffer[console.nCurBuffer], coord);
 			WriteFile(console.hBuffer[console.nCurBuffer], chBuf, nLen, &dw, NULL);
 
-			ClearScreen();
+			
 			BufferFlip();
+			ClearScreen();
 			Sleep(1);
 			*/
+			
 		}
 	}
 }
@@ -231,6 +262,8 @@ void MainGame::stageOne()
 void MainGame::stageTwo()
 {
 	int x = 0;
+	int rulletReturn[3] = { 1, 1, 1 };
+	bool clear = false;
 	ch->setXY(15, 25);
 	ClearScreen();
 	bg->showBg(2, x, 0);
@@ -293,7 +326,57 @@ void MainGame::stageTwo()
 				else if (x > 39 && x < 46)
 					room2->showCandle();
 				else if (x > 68 && x < 72)
+				{
 					room2->showRullet();
+					if (clear)
+						room2->rulletAnswer();
+					else
+					{
+						if (room2->playRullet())
+						{
+							message("룰렛에서 열쇠가 떨어졌다…");
+							clear = true;
+							Sleep(2000);
+							bg->showBg(2, x, 0);
+							ch->showChar_front(2, x);
+							continue;
+						}
+						else
+						{
+							message("아무 일도 일어나지 않았다…");
+							Sleep(2000);
+							bg->showBg(2, x, 0);
+							ch->showChar_front(2, x);
+						}
+					}
+				}
+				else if (ch->getX() > 60 && ch->getX() < 65)
+				{
+					if (inven->getHasKey())
+					{
+						message("열쇠를 사용하여 문을 열까? (Y: 예 / N: 아니오)");
+						while (!_kbhit())
+						{
+							key = _getch();
+							if (key == 89 || key == 121)
+							{
+								message("열쇠를 사용하여 문을 열었다");
+								Sleep(1000);
+								return;
+							}
+							else if (key == 78 || key == 110)
+								break;
+						}
+						continue;
+					}
+					else
+					{
+						message("열쇠가 필요한 것 같다…");
+						Sleep(2000);
+						bg->showBg(2, x, 0);
+						ch->showChar_front(2, x);
+					}
+				}
 			}
 			else if (key == 27)
 			{
@@ -316,6 +399,7 @@ void MainGame::stageThree()
 {
 	int x = 0;
 	ch->setXY(15, 25);
+	bool boxOpen = false;
 	ClearScreen();
 	bg->showBg(3, x, 0);
 	ch->showChar_front(3, x);
@@ -371,8 +455,39 @@ void MainGame::stageThree()
 				{
 					room3->showArcade();
 				}
-				else if (x > 45)
-					room3->showLocker();
+				else if (x > 42 && x < 50)
+				{
+					if (boxOpen)
+					{
+						room3->showNote();
+						continue;
+					}
+					else
+					{
+						room3->showLocker();
+						if (inven->getHasKey())
+						{
+							message("열쇠를 사용하여 상자를 열었다");
+							Sleep(2000);
+							
+							room3->showNote();
+							message("백신과 쪽지를 발견했다");
+							boxOpen = true;
+							continue;
+						}
+						else
+						{
+							message("열쇠가 필요할 것 같다…");
+							Sleep(2000);
+							bg->showBg(3, x, 0);
+							ch->showChar_front(3, x);
+						}
+					}
+				}
+				else if (ch->getX() > 60 && ch->getX() < 64)
+				{
+					message("_ _ _ _");
+				}
 
 			}
 			else if (key == 27)

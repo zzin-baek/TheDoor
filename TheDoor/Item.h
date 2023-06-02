@@ -81,12 +81,13 @@ private:
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
-	itemInfo keys[3];
+	itemInfo items[4];
 
 public:
 	Item();
 	~Item();
 
+	itemInfo* getItem() { return items; }
 	void showItem()
 	{
 		
