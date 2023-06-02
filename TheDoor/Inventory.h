@@ -19,6 +19,11 @@ public:
 
 	void invenUI();
 
+	void addItem(itemInfo item);
+	void useItem();
+	itemInfo getItemNum();
+	int getSize() { return inven.size(); }
+
 	void setHasKey(bool have) { hasKey = have; }
 	bool getHasKey() { return hasKey; }
 

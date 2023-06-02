@@ -7,3 +7,7 @@ Room3::Room3()
 Room3::~Room3()
 {
 }
+
+void Room3::playArcade()
+{
+}

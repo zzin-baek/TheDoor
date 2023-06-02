@@ -160,5 +160,7 @@ public:
 			}
 		}
 	}
+
+	void playArcade();
 };
 

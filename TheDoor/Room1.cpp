@@ -1,5 +1,22 @@
 #include "Room1.h"
 
+int Room1::insertPassword()
+{
+	int input[4] = { 0, };
+	for (int i = 0; i < 4; i++)
+	{
+		gotoxy(10, 33 + i * 2);
+		cin >> input[i];
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (password[i] != input[i])
+			return 0;
+	}
+	return 1;
+}
+
 int Room1::miniGame1()
 {
 	int startX = 25;

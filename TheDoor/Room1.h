@@ -1,5 +1,6 @@
 #pragma once
 #include "header.h"
+#include "BackGround.h"
 
 class Room1
 {
@@ -136,6 +137,7 @@ private:
 	};
 	
 	bool gameClear = false;
+	int password[4] = { 1, 7, 1, 9 };
 
 public:
 	void showMaze()
@@ -147,6 +149,7 @@ public:
 				gotoxy(14 + j * 2, 3 + i);
 				TextColor(room1_minigame1[i][j], room1_minigame1[i][j]);
 				printf("бс");
+				//drawBackBuffer(3 + i, 14 + 2 * j, "бс");
 			}
 		}
 		gotoxy(16, 4);
@@ -162,6 +165,7 @@ public:
 				gotoxy(14 + j * 2, 3 + i);
 				TextColor(room1_minigame1_clear[i][j], room1_minigame1_clear[i][j]);
 				printf("бс");
+				//drawBackBuffer(3 + i, 14 + 2 * j, "бс");
 			}
 		}
 	}
@@ -174,6 +178,7 @@ public:
 				gotoxy(14 + j * 2, 3 + i);
 				TextColor(room1_minigame2[i][j], room1_minigame2[i][j]);
 				printf("бс");
+				//drawBackBuffer(3 + i, 14 + 2 * j, "бс");
 			}
 		}
 	}
@@ -187,9 +192,11 @@ public:
 				gotoxy(14 + j * 2, 3 + i);
 				TextColor(box[i][j], box[i][j]);
 				printf("бс");
+				//drawBackBuffer(3 + i, 14 + 2 * j, "бс");
 			}
 		}
 	}
+	int insertPassword();
 	int miniGame1();
 	void setGameClear(bool clear) { gameClear = clear; }
 	bool getGameClear() { return gameClear; }

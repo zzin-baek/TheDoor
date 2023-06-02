@@ -70,7 +70,7 @@ public:
 				else TextColor(charactor[i][j], charactor[i][j]);
 				
 				printf("бс");
-				//drawBackBuffer(_posY + i, _posX + 2 * j, "\433[4;36m""бс");
+				//drawBackBuffer(_posY + i, _posX + 2 * j, "бс");
 			}
 			cout << endl;
 		}
@@ -93,7 +93,7 @@ public:
 					TextColor(bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2));
 				else TextColor(charactor[i][11-j], charactor[i][11-j]);
 				printf("бс");
-				//drawBackBuffer(_posY + i, _posX + 3 * j, "\433[4;36m""бс");
+				//drawBackBuffer(_posY + i, _posX + 3 * j, "бс");
 			}
 			cout << endl;
 		}

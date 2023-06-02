@@ -53,3 +53,19 @@ void Inventory::invenUI()
 	}
 
 }
+
+void Inventory::addItem(itemInfo item)
+{
+	inven.push_back(item);
+}
+
+void Inventory::useItem()
+{
+	inven.clear();
+}
+
+itemInfo Inventory::getItemNum()
+{
+	if (inven.size() != 0)
+		return *inven.begin();
+}

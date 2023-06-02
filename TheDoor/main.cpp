@@ -12,6 +12,7 @@ void main()
 	start = mg.mainMenu();
 	if (start == 35)
 	{
+		mg.mainScript();
 		mg.gameStart();
 	}
 	else

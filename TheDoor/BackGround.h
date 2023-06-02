@@ -165,11 +165,11 @@ public:
 			{
 				for (int j = 0; j < 45; j++)
 				{
-					gotoxy(2 * j, i);
+					//gotoxy(2 * j, i);
 
 					TextColor(bg_l[i][x + j], bg_l[i][x + j]);
 					printf("бс");
-					//drawBackBuffer(i, 2 * j,"\033[0;36m" "бс");
+					//drawBackBuffer(i, 2 * j,"бс");
 
 				}
 				cout << endl;
@@ -190,7 +190,7 @@ public:
 
 					TextColor(bg[i][x + j], bg[i][x + j]);
 					printf("бс");
-					//drawBackBuffer(i, 2 * j,"\033[0;36m" "бс");
+					//drawBackBuffer(i, 2 * j,"бс");
 
 				}
 				cout << endl;

@@ -12,6 +12,7 @@ MainGame::MainGame()
 	room2 = new Room2;
 	room3 = new Room3;
 	inven = new Inventory;
+	item = new Item;
 }
 
 MainGame::~MainGame()
@@ -116,17 +117,24 @@ int MainGame::mainMenu()
 	return 0;
 }
 
+void MainGame::mainScript()
+{
+	system("cls");
+	//ss->printIntro();		
+}
+
 void MainGame::stageOne()
 {
 	int x = 0;
+	int unlock = false;
 	ClearScreen();
 	ch->setXY(15, 25);
 	bg->showBg(1, x, 0);
 	ch->showChar_front(1, x);
 	//render();
-	char chBuf[90*40] = { 0, };
+	/*char chBuf[90*40] = { 0, };
 	COORD coord{ 0,0 };
-	DWORD dw = 0;
+	DWORD dw = 0;*/
 
 	while (1)
 	{
@@ -199,8 +207,32 @@ void MainGame::stageOne()
 
 				else if (x > 60 && x < 72)
 				{
-					room1->showBox();
-					message("_ _ _ _");
+					if (unlock)
+						message("…");
+					else
+					{
+						room1->showBox();
+						message("_ _ _ _");
+						if (room1->insertPassword())
+						{
+							message("자물쇠가 열렸다");
+							Sleep(2000);
+							message("열쇠를 얻었다");
+							Sleep(2000);
+							inven->addItem(item->getItem()[0]);
+							inven->setHasKey(true);
+							unlock = true;
+							bg->showBg(1, x, 0);
+							ch->showChar_front(1, x);
+						}
+						else
+						{
+							message("아무 일도 일어나지 않았다…");
+							Sleep(2000);
+							bg->showBg(1, x, 0);
+							ch->showChar_front(1, x);
+						}
+					}
 				}
 				else if (ch->getX() > 60 && ch->getX() < 65)
 				{
@@ -214,6 +246,8 @@ void MainGame::stageOne()
 							{
 								message("열쇠를 사용하여 문을 열었다");
 								Sleep(1000);
+								inven->useItem();
+								inven->setHasKey(false);
 								return;
 							}
 							else if (key == 78 || key == 110)
@@ -234,6 +268,15 @@ void MainGame::stageOne()
 			{
 				ClearScreen();
 				inven->invenUI();
+				if (inven->getSize() > 0)
+				{
+					item->showItem(inven->getItemNum().itemNum);
+					gotoxy(34, 25);
+					TextColor(15, 0);
+					printf("<%s>", inven->getItemNum().itemName.c_str());
+					gotoxy(10, 31);
+					printf("%s", inven->getItemNum().feature.c_str());
+				}
 				key = _getch();
 				if (key == 27)
 				{
@@ -337,6 +380,8 @@ void MainGame::stageTwo()
 							message("룰렛에서 열쇠가 떨어졌다…");
 							clear = true;
 							Sleep(2000);
+							inven->addItem(item->getItem()[1]);
+							inven->setHasKey(true);
 							bg->showBg(2, x, 0);
 							ch->showChar_front(2, x);
 							continue;
@@ -361,6 +406,8 @@ void MainGame::stageTwo()
 							if (key == 89 || key == 121)
 							{
 								message("열쇠를 사용하여 문을 열었다");
+								inven->useItem();
+								inven->setHasKey(false);
 								Sleep(1000);
 								return;
 							}
@@ -382,6 +429,15 @@ void MainGame::stageTwo()
 			{
 				ClearScreen();
 				inven->invenUI();
+				if (inven->getSize() > 0)
+				{
+					item->showItem(inven->getItemNum().itemNum);					
+					gotoxy(34, 25);
+					TextColor(15, 0);
+					printf("<%s>", inven->getItemNum().itemName.c_str());
+					gotoxy(10, 31);
+					printf("%s", inven->getItemNum().feature.c_str());
+				}
 				key = _getch();
 				if (key == 27)
 				{
@@ -494,6 +550,15 @@ void MainGame::stageThree()
 			{
 				ClearScreen();
 				inven->invenUI();
+				if (inven->getSize() > 0)
+				{
+					item->showItem(inven->getItemNum().itemNum);
+					gotoxy(34, 25);
+					TextColor(15, 0);
+					printf("<%s>", inven->getItemNum().itemName.c_str());
+					gotoxy(10, 31);
+					printf("%s", inven->getItemNum().feature.c_str());
+				}
 				key = _getch();
 				if (key == 27)
 				{
@@ -525,6 +590,15 @@ void MainGame::gameStart()
 	stageOne();
 	stageTwo();
 	stageThree();
+
+	ending();
+}
+
+void MainGame::ending()
+{
+	system("cls");
+	ss->printOutro();
+	ss->showEndingScreen();
 }
 
 void MainGame::ClearScreen()

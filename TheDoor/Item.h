@@ -3,7 +3,7 @@
 
 struct itemInfo
 {
-	int roomNum;
+	int itemNum;
 	std::string itemName;
 	std::string feature;
 };
@@ -88,9 +88,32 @@ public:
 	~Item();
 
 	itemInfo* getItem() { return items; }
-	void showItem()
+	void showItem(int num)
 	{
-		
+		int items[15][15];
+		switch (num)
+		{
+		case 1:
+			memcpy(items, key1, sizeof(key1));
+			break;
+		case 2:
+			memcpy(items, key2, sizeof(key2));
+			break;
+		case 3:
+			memcpy(items, key3, sizeof(key3));
+			break;
+		case 4:
+			memcpy(items, vaccine, sizeof(vaccine));
+			break;
+		}
+
+		for (int i = 0; i < 15; i++)
+			for (int j = 0; j < 15; j++)
+			{
+				gotoxy(34 + 2 * j, 8 + i);
+				TextColor(items[i][j], items[i][j]);
+				printf("бс");
+			}
 	}
 };
 

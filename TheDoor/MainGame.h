@@ -7,6 +7,7 @@
 #include "Room2.h"
 #include "Room3.h"
 #include "Inventory.h"
+#include "Item.h"
 
 #define		WIDTH		90
 #define		HEIGHT		40
@@ -49,6 +50,7 @@ private:
 	Room3* room3;
 
 	Inventory* inven;
+	Item* item;
 
 	const char* msg[MAXCHAR] = {
 		"旨收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收收旬 ",
@@ -66,12 +68,14 @@ public:
 
 	void init();
 	int mainMenu();
+	void mainScript();
 	void stageOne();
 	void stageTwo();
 	void stageThree();
 	void message(std::string str);
 
 	void gameStart();
+	void ending();
 
 	void ClearScreen();
 	void BufferFlip();
