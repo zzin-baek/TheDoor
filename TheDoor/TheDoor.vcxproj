@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
-    <ClCompile Include="header.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="MainGame.cpp" />

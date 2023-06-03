@@ -1,9 +1,9 @@
 #pragma once
 #include "header.h"
 
-void init_buffer();
-void drawBackBuffer(const int i, const int j, const char* dot);
-void render();
+void initConsole();
+void drawBackBuffer(const int i, const int j, char* image);
+void render(int x, int y);
 
 class BackGround
 {
@@ -169,9 +169,10 @@ public:
 
 					TextColor(bg_l[i][x + j], bg_l[i][x + j]);
 					printf("бс");
-					//drawBackBuffer(i, 2 * j,"бс");
+					//drawBackBuffer(i, j,"бс");
 
 				}
+				//render();
 				cout << endl;
 			}
 			gotoxy(1, 1);
@@ -190,9 +191,10 @@ public:
 
 					TextColor(bg[i][x + j], bg[i][x + j]);
 					printf("бс");
-					//drawBackBuffer(i, 2 * j,"бс");
+					//drawBackBuffer(i, j,"бс");
 
 				}
+				//render();
 				cout << endl;
 			}
 			gotoxy(1, 1);

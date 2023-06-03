@@ -17,9 +17,8 @@ void Room2::init()
 
 int Room2::playRullet()
 {
-	int stopNum_copy[3];
 	init();
-
+	int stopNum_copy[3];
 	srand(time(NULL));
 
 	while (1)
@@ -59,7 +58,7 @@ int Room2::playRullet()
 				printf("бс");
 			}
 		}
-		Sleep(700);
+		Sleep(850);
 
 		if (_kbhit())
 		{

@@ -31,6 +31,7 @@ MainGame::~MainGame()
 
 void MainGame::init()
 {
+	initConsole();
 	system("mode con: cols=90 lines=45 | title 더 도어 ");
 
 	console.hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -52,6 +53,7 @@ void MainGame::init()
 
 int MainGame::mainMenu()
 {
+	PlaySound(TEXT("./BGM/시작.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ss->showStartScreen();
 	gotoxy(40, 35);
 	printf("게임 시작");
@@ -88,9 +90,11 @@ int MainGame::mainMenu()
 		}
 		else if (key == 13)
 		{
+			PlaySound(NULL, 0, 0);
 			return cursor;
 		}
 	}
+	PlaySound(NULL, 0, 0);
 	return 0;
 }
 
@@ -102,12 +106,12 @@ void MainGame::mainScript()
 
 void MainGame::stageOne()
 {
+	PlaySound(TEXT("./BGM/방1.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int x = 0;
 	int walkSpeed = 0;
 	int unlock = false;
 
 	ClearScreen();
-
 	ch->setXY(15, 25);
 	bg->showBg(1, x, 0);
 	ch->showChar_front(1, x);
@@ -228,6 +232,7 @@ void MainGame::stageOne()
 								Sleep(1000);
 								inven->useItem();
 								inven->setHasKey(false);
+								PlaySound(NULL, 0, 0);
 								return;
 							}
 							else if (key == 78 || key == 110)
@@ -274,6 +279,8 @@ void MainGame::stageOne()
 
 void MainGame::stageTwo()
 {
+	PlaySound(TEXT("./BGM/방2.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 	int x = 0;
 	int walkSpeed = 0;
 	int rulletReturn[3] = { 1, 1, 1 };
@@ -386,6 +393,7 @@ void MainGame::stageTwo()
 								inven->useItem();
 								inven->setHasKey(false);
 								Sleep(1000);
+								PlaySound(NULL, 0, 0);
 								return;
 							}
 							else if (key == 78 || key == 110)
@@ -432,6 +440,8 @@ void MainGame::stageTwo()
 
 void MainGame::stageThree()
 {
+	PlaySound(TEXT("./BGM/방3.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 	int x = 0;
 	int walkSpeed = 0;
 	bool gameClear = false;
@@ -523,7 +533,11 @@ void MainGame::stageThree()
 					if (boxOpen)
 					{
 						room3->showNote();
-						continue;
+						if (_getch() == 27)
+						{
+							bg->showBg(3, x, 0);
+							ch->showChar_front(3, x);
+						}
 					}
 					else
 					{
@@ -560,7 +574,8 @@ void MainGame::stageThree()
 					{
 						message("문이 열렸다");
 						Sleep(2000);
-						break;
+						PlaySound(NULL, 0, 0);
+						return;
 					}
 					else
 					{
@@ -622,7 +637,16 @@ void MainGame::ending()
 {
 	system("cls");
 	ss->printOutro();
+	PlaySound(TEXT("./BGM/엔딩.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ss->showEndingScreen();
+
+	while (!_kbhit())
+	{
+		int key = _getch();
+		if (key > 0)
+			break;
+	}
+	
 }
 
 void MainGame::ClearScreen()

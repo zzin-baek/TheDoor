@@ -13,7 +13,7 @@ int Room3::playArcade()
 	int initEnemy = 20;
 	int initPlayer = 20;
 
-	int enemyHP = 5;
+	int enemyHP = 10;
 
 	int bulletNum = 0;
 	srand(time(NULL));

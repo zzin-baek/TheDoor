@@ -6,9 +6,13 @@
 #include <conio.h>
 #include <string>
 #include <vector>
-#include <thread>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 using namespace std;
+
+#define		WIDTH		90
+#define		HEIGHT		40
 
 #define		UP			72
 #define		DOWN		80

@@ -14,6 +14,7 @@ void main()
 	{
 		mg.mainScript();
 		mg.gameStart();
+
 	}
 	else
 		exit(0);

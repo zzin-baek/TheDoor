@@ -9,9 +9,6 @@
 #include "Inventory.h"
 #include "Item.h"
 
-#define		WIDTH		90
-#define		HEIGHT		40
-
 struct stRect
 {
 	int nWidth;

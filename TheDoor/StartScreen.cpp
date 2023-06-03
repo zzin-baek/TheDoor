@@ -10,6 +10,7 @@ StartScreen::~StartScreen()
 
 void StartScreen::printIntro()
 {
+	PlaySound(TEXT("./BGM/키보드.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int introX = 8;
 	int introY = 10;
 	TextColor(15, 0);
@@ -20,7 +21,7 @@ void StartScreen::printIntro()
 			if (_kbhit())
 				Sleep(5);
 			else
-				Sleep(40);
+				Sleep(30);
 
 			gotoxy(introX, introY);	
 			if (j == 75)
@@ -30,20 +31,19 @@ void StartScreen::printIntro()
 			}
 			else introX++;
 
-			cout << intro[i][j];
-			
-
-			
+			cout << intro[i][j];			
 		}
 		introY += 3;
 		introX = 8;
 	}
+	PlaySound(NULL, 0, 0);
 	cout << endl;
 	Sleep(3000);
 }
 
 void StartScreen::printOutro()
 {
+	PlaySound(TEXT("./BGM/키보드.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int outroX = 8;
 	int outroY = 14;
 	TextColor(15, 0);
@@ -71,6 +71,7 @@ void StartScreen::printOutro()
 		outroY += 3;
 		outroX = 8;
 	}
+	PlaySound(NULL, 0, 0);
 	cout << endl;
 	Sleep(2000);
 }
