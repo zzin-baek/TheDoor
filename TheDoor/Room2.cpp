@@ -59,7 +59,7 @@ int Room2::playRullet()
 				printf("бс");
 			}
 		}
-		Sleep(500);
+		Sleep(700);
 
 		if (_kbhit())
 		{
@@ -79,18 +79,18 @@ int Room2::playRullet()
 				stop[2] = true;
 				stopNum_copy[2] = stopNum[2];
 			}
+			else if (key == 27)
+				return 0;
 		}
 	}
 }
 
 int Room2::checkAnswer(int* arr)
 {
-	if ((arr[0]==arr[1]) && (arr[2]==arr[0]))
-	{
-		printf("┼м╕о╛ю");
+	if ((arr[0] == 2) && (arr[1] == 3) && (arr[2] == 1))
 		return 1;
-	}
-	return 0;
+	else
+		return 0;
 }
 
 void Room2::rulletAnswer()
@@ -104,11 +104,11 @@ void Room2::rulletAnswer()
 			printf("бс");
 
 			gotoxy(34 + j * 2, 13 + i);
-			TextColor(rulletNum[2][i][j], rulletNum[2][i][j]);
+			TextColor(rulletNum[3][i][j], rulletNum[3][i][j]);
 			printf("бс");
 
 			gotoxy(48 + j * 2, 13 + i);
-			TextColor(rulletNum[2][i][j], rulletNum[2][i][j]);
+			TextColor(rulletNum[1][i][j], rulletNum[1][i][j]);
 			printf("бс");
 		}
 	}

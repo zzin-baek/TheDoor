@@ -12,11 +12,6 @@
 #define		WIDTH		90
 #define		HEIGHT		40
 
-#define		UP			72
-#define		DOWN		80
-#define		RIGHT		77
-#define		LEFT		75
-
 struct stRect
 {
 	int nWidth;
@@ -78,5 +73,4 @@ public:
 	void ending();
 
 	void ClearScreen();
-	void BufferFlip();
 };

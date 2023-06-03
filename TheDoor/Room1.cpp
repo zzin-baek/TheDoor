@@ -3,10 +3,25 @@
 int Room1::insertPassword()
 {
 	int input[4] = { 0, };
-	for (int i = 0; i < 4; i++)
+	int count = 0;
+
+	while (count < 4)
 	{
-		gotoxy(10, 33 + i * 2);
-		cin >> input[i];
+		if (_kbhit())
+		{
+			int key = _getch();
+			if (key > 47 && key < 58)
+			{
+				gotoxy(10 + count * 2, 33);
+				input[count] = key - 48;
+				printf("%d", input[count]);
+				count++;
+			}
+			else if (key == 27)
+				break;
+			else
+				continue;
+		}
 	}
 
 	for (int i = 0; i < 4; i++)

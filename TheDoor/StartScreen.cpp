@@ -15,9 +15,13 @@ void StartScreen::printIntro()
 	TextColor(15, 0);
 	for (int i = 0; i < 7; i++)
 	{
-		for (int j = 0; j < strlen(intro[i].c_str()); j++)
+		for (int j = 0; j < strlen(intro[i]); j++)
 		{
-			Sleep(40);
+			if (_kbhit())
+				Sleep(5);
+			else
+				Sleep(40);
+
 			gotoxy(introX, introY);	
 			if (j == 75)
 			{
@@ -35,26 +39,28 @@ void StartScreen::printIntro()
 		introX = 8;
 	}
 	cout << endl;
-
 	Sleep(3000);
 }
 
 void StartScreen::printOutro()
 {
 	int outroX = 8;
-	int outroY = 10;
+	int outroY = 14;
 	TextColor(15, 0);
 	for (int i = 0; i < 5; i++)
 	{
-		for (int j = 0; j < strlen(outro[i].c_str()); j++)
+		for (int j = 0; j < strlen(outro[i]); j++)
 		{
 			Sleep(40);
+
 			gotoxy(outroX, outroY);
 			if (j == 75)
 			{
 				outroX = 9;
 				outroY += 3;
 			}
+			else if (sizeof(outro[i][j]) > 1)
+				outroX += 2;
 			else outroX++;
 
 			cout << outro[i][j];

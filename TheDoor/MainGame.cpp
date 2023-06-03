@@ -11,6 +11,7 @@ MainGame::MainGame()
 	room1 = new Room1;
 	room2 = new Room2;
 	room3 = new Room3;
+
 	inven = new Inventory;
 	item = new Item;
 }
@@ -24,22 +25,12 @@ MainGame::~MainGame()
 	delete room2;
 	delete room3;
 	delete inven;
-
-	if (console.hBuffer[0] != nullptr)
-	{
-		CloseHandle(console.hBuffer[0]);
-	}
-
-	if (console.hBuffer[1] != nullptr)
-	{
-		CloseHandle(console.hBuffer[1]);
-	}
+	delete item;
 
 }
 
 void MainGame::init()
 {
-	init_buffer();
 	system("mode con: cols=90 lines=45 | title 더 도어 ");
 
 	console.hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -53,23 +44,9 @@ void MainGame::init()
 	cursorInfo.dwSize = 1; // 커서의 크기를 결정 (1~100 사이만 가능)
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 
-	GetConsoleScreenBufferInfo(console.hConsole, &consoleInfo);
-	consoleInfo.dwSize.X = WIDTH;    // 콘솔의 Width
-	consoleInfo.dwSize.Y = HEIGHT;
-
 	// 콘솔의 크기를 다시 계산 (나중에 그림 그릴때 사용)
 	console.rtConsole.nWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
 	console.rtConsole.nHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
-
-	// 콘솔의 첫번째 화면 버퍼 생성
-	console.hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleScreenBufferSize(console.hBuffer[0], consoleInfo.dwSize);    // 화면 버퍼 크기 설정
-	SetConsoleWindowInfo(console.hBuffer[0], TRUE, &consoleInfo.srWindow); // 콘솔 설정
-
-	// 콘솔의 두번째 화면 버퍼 생성
-	console.hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleScreenBufferSize(console.hBuffer[1], consoleInfo.dwSize);
-	SetConsoleWindowInfo(console.hBuffer[1], TRUE, &consoleInfo.srWindow);
 
 }
 
@@ -120,31 +97,30 @@ int MainGame::mainMenu()
 void MainGame::mainScript()
 {
 	system("cls");
-	//ss->printIntro();		
+	ss->printIntro();		
 }
 
 void MainGame::stageOne()
 {
 	int x = 0;
+	int walkSpeed = 0;
 	int unlock = false;
+
 	ClearScreen();
+
 	ch->setXY(15, 25);
 	bg->showBg(1, x, 0);
 	ch->showChar_front(1, x);
-	//render();
-	/*char chBuf[90*40] = { 0, };
-	COORD coord{ 0,0 };
-	DWORD dw = 0;*/
 
 	while (1)
 	{
-		//render();
 		if (_kbhit())
 		{
 			int key = _getch();
 
 			if (key == 224)
 			{
+				walkSpeed++;
 				key = _getch();
 				if (key == RIGHT)
 				{
@@ -159,7 +135,8 @@ void MainGame::stageOne()
 					else
 						ch->setXY(ch->getX() + 1, ch->getY());
 
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(1, x, 0);
 					ch->showChar_front(1, x);
 
@@ -177,11 +154,11 @@ void MainGame::stageOne()
 					else
 						ch->setXY(ch->getX() - 1, ch->getY());
 					
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(1, x, 0);
 					ch->showChar_back(1, x);
 				}
-				printf("%d %d", ch->getX(), x);
 			}
 			else if (key == 32)
 			{
@@ -213,6 +190,9 @@ void MainGame::stageOne()
 					{
 						room1->showBox();
 						message("_ _ _ _");
+						gotoxy(72, 36);
+						printf("HINT : 숫자");
+
 						if (room1->insertPassword())
 						{
 							message("자물쇠가 열렸다");
@@ -251,7 +231,11 @@ void MainGame::stageOne()
 								return;
 							}
 							else if (key == 78 || key == 110)
+							{
+								bg->showBg(1, x, 0);
+								ch->showChar_front(1, x);
 								break;
+							}
 						}
 						continue;
 					}
@@ -271,7 +255,7 @@ void MainGame::stageOne()
 				if (inven->getSize() > 0)
 				{
 					item->showItem(inven->getItemNum().itemNum);
-					gotoxy(34, 25);
+					gotoxy(30, 7);
 					TextColor(15, 0);
 					printf("<%s>", inven->getItemNum().itemName.c_str());
 					gotoxy(10, 31);
@@ -284,20 +268,6 @@ void MainGame::stageOne()
 					ch->showChar_front(1, x);
 				}
 			}
-			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
-				break;
-			/*
-			memset(chBuf, 0, sizeof(chBuf));
-			int nLen = sprintf_s(chBuf, sizeof(chBuf), "■");
-			SetConsoleCursorPosition(console.hBuffer[console.nCurBuffer], coord);
-			WriteFile(console.hBuffer[console.nCurBuffer], chBuf, nLen, &dw, NULL);
-
-			
-			BufferFlip();
-			ClearScreen();
-			Sleep(1);
-			*/
-			
 		}
 	}
 }
@@ -305,22 +275,25 @@ void MainGame::stageOne()
 void MainGame::stageTwo()
 {
 	int x = 0;
+	int walkSpeed = 0;
 	int rulletReturn[3] = { 1, 1, 1 };
 	bool clear = false;
-	ch->setXY(15, 25);
+	
 	ClearScreen();
+	
+	ch->setXY(15, 25);
 	bg->showBg(2, x, 0);
 	ch->showChar_front(2, x);
 	
 	while (1)
 	{
-		//render();
 		if (_kbhit())
 		{
 			int key = _getch();
 
 			if (key == 224)
 			{
+				walkSpeed++;
 				key = _getch();
 				if (key == RIGHT)
 				{
@@ -335,7 +308,8 @@ void MainGame::stageTwo()
 					else
 						ch->setXY(ch->getX() + 1, ch->getY());
 
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(2, x, 0);
 					ch->showChar_front(2, x);
 
@@ -353,11 +327,11 @@ void MainGame::stageTwo()
 					else
 						ch->setXY(ch->getX() - 1, ch->getY());
 
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(2, x, 0);
 					ch->showChar_back(2, x);
 				}
-				printf("%d %d", ch->getX(), x);
 			}
 			else if (key == 32)
 			{
@@ -372,7 +346,10 @@ void MainGame::stageTwo()
 				{
 					room2->showRullet();
 					if (clear)
+					{
 						room2->rulletAnswer();
+						message("…");
+					}
 					else
 					{
 						if (room2->playRullet())
@@ -412,7 +389,11 @@ void MainGame::stageTwo()
 								return;
 							}
 							else if (key == 78 || key == 110)
+							{
+								bg->showBg(2, x, 0);
+								ch->showChar_front(2, x);
 								break;
+							}
 						}
 						continue;
 					}
@@ -432,7 +413,7 @@ void MainGame::stageTwo()
 				if (inven->getSize() > 0)
 				{
 					item->showItem(inven->getItemNum().itemNum);					
-					gotoxy(34, 25);
+					gotoxy(30, 7);
 					TextColor(15, 0);
 					printf("<%s>", inven->getItemNum().itemName.c_str());
 					gotoxy(10, 31);
@@ -445,8 +426,6 @@ void MainGame::stageTwo()
 					ch->showChar_front(2, x);
 				}
 			}
-			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
-				break;
 		}
 	}
 }
@@ -454,21 +433,25 @@ void MainGame::stageTwo()
 void MainGame::stageThree()
 {
 	int x = 0;
-	ch->setXY(15, 25);
+	int walkSpeed = 0;
+	bool gameClear = false;
 	bool boxOpen = false;
+
 	ClearScreen();
+	
+	ch->setXY(15, 25);
 	bg->showBg(3, x, 0);
 	ch->showChar_front(3, x);
 
 	while (1)
 	{
-		//render();
 		if (_kbhit())
 		{
 			int key = _getch();
 
 			if (key == 224)
 			{
+				walkSpeed++;
 				key = _getch();
 				if (key == RIGHT)
 				{
@@ -481,7 +464,8 @@ void MainGame::stageThree()
 					else
 						ch->setXY(ch->getX() + 1, ch->getY());
 
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(3, x, 0);
 					ch->showChar_front(3, x);
 
@@ -499,17 +483,40 @@ void MainGame::stageThree()
 					else
 						ch->setXY(ch->getX() - 1, ch->getY());
 
-					ch->setWalk(!ch->getWalk());
+					if (walkSpeed % 5 == 0)
+						ch->setWalk(!ch->getWalk());
 					bg->showBg(3, x, 0);
 					ch->showChar_back(3, x);
 				}
-				printf("%d %d", ch->getX(), x);
 			}
 			else if (key == 32)
 			{
 				if (x > 12 && x < 18)
 				{
 					room3->showArcade();
+					if (gameClear)
+					{
+						room3->showClear();
+						message("…");
+					}
+					else
+					{
+						if (room3->playArcade())
+						{
+							inven->addItem(item->getItem()[2]);
+							inven->setHasKey(true);
+							message("게임기에서 열쇠가 떨어졌다…");
+							Sleep(2000);
+							gameClear = true;
+							bg->showBg(3, x, 0);
+							ch->showChar_front(3, x);
+						}
+						else
+						{
+							bg->showBg(3, x, 0);
+							ch->showChar_front(3, x);
+						}
+					}
 				}
 				else if (x > 42 && x < 50)
 				{
@@ -524,10 +531,13 @@ void MainGame::stageThree()
 						if (inven->getHasKey())
 						{
 							message("열쇠를 사용하여 상자를 열었다");
+							inven->useItem();
+							inven->setHasKey(false);
 							Sleep(2000);
 							
 							room3->showNote();
 							message("백신과 쪽지를 발견했다");
+							inven->addItem(item->getItem()[3]);
 							boxOpen = true;
 							continue;
 						}
@@ -542,7 +552,23 @@ void MainGame::stageThree()
 				}
 				else if (ch->getX() > 60 && ch->getX() < 64)
 				{
-					message("_ _ _ _");
+					message("_ _ _ _ _");
+					gotoxy(72, 36);
+					printf("HINT : 영어");
+
+					if (room3->insertPassword())
+					{
+						message("문이 열렸다");
+						Sleep(2000);
+						break;
+					}
+					else
+					{
+						message("아무 일도 일어나지 않았다…");
+						Sleep(2000);
+						bg->showBg(3, x, 0);
+						ch->showChar_front(3, x);
+					}
 				}
 
 			}
@@ -553,7 +579,7 @@ void MainGame::stageThree()
 				if (inven->getSize() > 0)
 				{
 					item->showItem(inven->getItemNum().itemNum);
-					gotoxy(34, 25);
+					gotoxy(30, 7);
 					TextColor(15, 0);
 					printf("<%s>", inven->getItemNum().itemName.c_str());
 					gotoxy(10, 31);
@@ -566,8 +592,6 @@ void MainGame::stageThree()
 					ch->showChar_front(3, x);
 				}
 			}
-			else if (key == 99) // 다음 스테이지 작업을 위한 임의 치트키
-				break;
 		}
 	}
 }
@@ -610,14 +634,6 @@ void MainGame::ClearScreen()
 	// 콘솔 화면 전체를 띄어쓰기를 넣어 빈 화면처럼 만듭니다.
 	FillConsoleOutputCharacter(console.hConsole, ' ', size, pos, &dwWritten);
 	SetConsoleCursorPosition(console.hConsole, pos);
-}
-
-void MainGame::BufferFlip()
-{
-	// 화면 버퍼 설정
-	SetConsoleActiveScreenBuffer(console.hBuffer[console.nCurBuffer]);
-	// 화면 버퍼 인덱스를 교체
-	console.nCurBuffer = console.nCurBuffer ? 0 : 1;
 }
 
 void TextColor(int font, int backGround)
