@@ -179,6 +179,10 @@ public:
 				printf("°·");
 			}
 		}
+
+		gotoxy(18, 26);
+		TextColor(0, 14);
+		printf("a, s, d: ∑Í∑ø ∏ÿ√ﬂ±‚");
 	}
 
 	void init();

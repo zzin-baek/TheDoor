@@ -97,7 +97,7 @@ int Room3::playArcade()
 		}
 		gotoxy(18, 4);
 		TextColor(0, 7);
-		printf("HP : %d", enemyHP);
+		printf("HP : %d ", enemyHP);
 		Sleep(80);
 	}
 	showClear();

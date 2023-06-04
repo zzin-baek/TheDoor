@@ -58,22 +58,22 @@ int Room2::playRullet()
 				printf("бс");
 			}
 		}
-		Sleep(850);
+		Sleep(1000);
 
 		if (_kbhit())
 		{
 			int key = _getch();
-			if (key == 49)
+			if (key == 97)
 			{
 				stop[0] = true;
 				stopNum_copy[0] = stopNum[0];
 			}
-			else if (key == 50)
+			else if (key == 115)
 			{
 				stop[1] = true;
 				stopNum_copy[1] = stopNum[1];
 			}
-			else if (key == 51)
+			else if (key == 100)
 			{
 				stop[2] = true;
 				stopNum_copy[2] = stopNum[2];
