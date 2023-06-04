@@ -35,17 +35,17 @@ int Room3::playArcade()
 		int enemyMove = rand() % 10;
 		if (enemyMove % 2 == 0)
 		{
-			if (initEnemy - 2 < 20)
+			if (initEnemy - 4 < 20)
 				continue;
 			else
-				initEnemy -= 2;
+				initEnemy -= 4;
 		}
 		else
 		{
-			if (initEnemy + 2 > 50)
+			if (initEnemy + 4 > 50)
 				continue;
 			else
-				initEnemy += 2;
+				initEnemy += 4;
 		}
 
 		if (_kbhit())

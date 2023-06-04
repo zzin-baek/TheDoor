@@ -141,6 +141,7 @@ void MainGame::stageOne()
 
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
+					
 					bg->showBg(1, x, 0);
 					ch->showChar_front(1, x);
 
@@ -229,10 +230,13 @@ void MainGame::stageOne()
 							if (key == 89 || key == 121)
 							{
 								message("열쇠를 사용하여 문을 열었다");
+								PlaySound(NULL, 0, 0);
+								PlaySound(TEXT("./BGM/문.wav"), NULL, SND_ASYNC);
 								Sleep(1000);
 								inven->useItem();
 								inven->setHasKey(false);
-								PlaySound(NULL, 0, 0);
+								
+								
 								return;
 							}
 							else if (key == 78 || key == 110)
@@ -392,8 +396,10 @@ void MainGame::stageTwo()
 								message("열쇠를 사용하여 문을 열었다");
 								inven->useItem();
 								inven->setHasKey(false);
-								Sleep(1000);
 								PlaySound(NULL, 0, 0);
+								PlaySound(TEXT("./BGM/문.wav"), NULL, SND_ASYNC);
+								Sleep(1000);
+								
 								return;
 							}
 							else if (key == 78 || key == 110)
@@ -573,8 +579,10 @@ void MainGame::stageThree()
 					if (room3->insertPassword())
 					{
 						message("문이 열렸다");
-						Sleep(2000);
 						PlaySound(NULL, 0, 0);
+						PlaySound(TEXT("./BGM/문.wav"), NULL, SND_ASYNC);
+						Sleep(2000);
+						
 						return;
 					}
 					else
