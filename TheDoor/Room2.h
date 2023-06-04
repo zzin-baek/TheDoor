@@ -97,6 +97,7 @@ private:
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
+	// ·ê·¿ ±×¸²
 	int rulletNum[5][6][5] = {
 		{
 			15,15,15,15,15,
@@ -135,6 +136,7 @@ private:
 			15,15,15,15,15, }
 	};
 
+	// ·ê·¿ÀÌ ¸ØÃè´ÂÁö È®ÀÎÇÏ´Â ¿ëµµÀÇ bool¹è¿­
 	bool stop[3] = { false, };
 	int stopNum[3];
 
@@ -142,53 +144,17 @@ public:
 	Room2();
 	~Room2();
 
-	void showClock()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(clock[i][j], clock[i][j]);
-				printf("¡á");
-			}
-		}
-	}
-
-	void showCandle()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(candle[i][j], candle[i][j]);
-				printf("¡á");
-			}
-		}
-	}
-
-	void showRullet()
-	{
-		for (int i = 0; i < 25; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(rullet[i][j], rullet[i][j]);
-				printf("¡á");
-			}
-		}
-
-		gotoxy(18, 26);
-		TextColor(0, 14);
-		printf("a, s, d: ·ê·¿ ¸ØÃß±â");
-	}
-
+	void showClock();
+	void showCandle();
+	void showRullet();
+	
+	// ·ê·¿ÀÌ ´Ù½Ã ·£´ýÇÏ°Ô µ¹¾Æ°¥ ¼ö ÀÖµµ·Ï ÃÊ±âÈ­
 	void init();
-
+	// ·ê·¿ ±¸Çö
 	int playRullet();
+	// Á¤´äÀÎÁö È®ÀÎ
 	int checkAnswer(int* arr);
+	// Á¤´ä ·ê·¿ Ãâ·Â
 	void rulletAnswer();
 
 };

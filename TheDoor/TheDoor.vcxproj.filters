@@ -13,9 +13,6 @@
     <Filter Include="TheDoor\화면">
       <UniqueIdentifier>{5a6ca4f0-60d4-4757-8334-229ee30693a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TheDoor\BGM">
-      <UniqueIdentifier>{30926c7c-0f86-4285-9e5c-221214d32474}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -35,7 +32,7 @@
     <ClCompile Include="Item.cpp">
       <Filter>TheDoor\아이템</Filter>
     </ClCompile>
-    <ClCompile Include="StartScreen.cpp">
+    <ClCompile Include="gameScreen.cpp">
       <Filter>TheDoor\화면</Filter>
     </ClCompile>
     <ClCompile Include="Charactor.cpp">
@@ -65,7 +62,7 @@
     <ClInclude Include="Item.h">
       <Filter>TheDoor\아이템</Filter>
     </ClInclude>
-    <ClInclude Include="StartScreen.h">
+    <ClInclude Include="gameScreen.h">
       <Filter>TheDoor\화면</Filter>
     </ClInclude>
     <ClInclude Include="Charactor.h">
@@ -74,28 +71,5 @@
     <ClInclude Include="BackGround.h">
       <Filter>TheDoor\화면</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="BGM\문.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\방1.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\방2.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\방3.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\시작.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\엔딩.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
-    <Media Include="BGM\키보드.wav">
-      <Filter>TheDoor\BGM</Filter>
-    </Media>
   </ItemGroup>
 </Project>

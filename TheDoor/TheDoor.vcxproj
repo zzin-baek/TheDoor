@@ -27,7 +27,7 @@
     <ClCompile Include="Room1.cpp" />
     <ClCompile Include="Room2.cpp" />
     <ClCompile Include="Room3.cpp" />
-    <ClCompile Include="StartScreen.cpp" />
+    <ClCompile Include="gameScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -40,16 +40,7 @@
     <ClInclude Include="Room1.h" />
     <ClInclude Include="Room2.h" />
     <ClInclude Include="Room3.h" />
-    <ClInclude Include="StartScreen.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="BGM\문.wav" />
-    <Media Include="BGM\방1.wav" />
-    <Media Include="BGM\방2.wav" />
-    <Media Include="BGM\방3.wav" />
-    <Media Include="BGM\시작.wav" />
-    <Media Include="BGM\엔딩.wav" />
-    <Media Include="BGM\키보드.wav" />
+    <ClInclude Include="gameScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

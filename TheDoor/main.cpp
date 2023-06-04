@@ -4,18 +4,20 @@
 void main()
 {
 	int start = 0;
-	
-	MainGame mg;
+	MainGame* mg = new MainGame;
 
-	mg.init();
-
-	start = mg.mainMenu();
+	// 게임을 위한 초기화
+	mg->init();
+	start = mg->mainMenu();
 	if (start == 35)
 	{
-		mg.mainScript();
-		mg.gameStart();
+		// 게임 시작을 누르면 게임 시작
+		mg->mainScript();
+		mg->gameStart();
 
 	}
-	else
+	else // 나가기를 선택하면 종료
 		exit(0);
+
+	delete mg;
 }

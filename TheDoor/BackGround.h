@@ -1,10 +1,6 @@
 #pragma once
 #include "header.h"
 
-void initConsole();
-void drawBackBuffer(const int i, const int j, char* image);
-void render(int x, int y);
-
 class BackGround
 {
 private:
@@ -137,82 +133,18 @@ private:
 
 	};
 
-	int _x = 0;
-	int _y = 0;
+	// 보이는 방의 위치를 움직이기 위한 변수
+	int _x;
+
 public:
 	BackGround();
 	~BackGround();
 
+	// 방이 움직였는지 알기 위한 getter, setter
 	void setX(int x) { _x = x; }
 	int getX() { return _x; }
 
-
-	void showBg(int roomNum, int x, int y)
-	{
-		int bg[40][120];
-		int bg_l[40][100];
-
-		if (roomNum == 1)
-			memcpy(bg, room_first, sizeof(room_first));
-		else if (roomNum == 2)
-			memcpy(bg, room_second, sizeof(room_second));
-		else if (roomNum == 3)
-			memcpy(bg_l, room_third, sizeof(room_third));
-
-		if (roomNum == 3)
-		{
-			for (int i = 0; i < 40; i++)
-			{
-				for (int j = 0; j < 45; j++)
-				{
-					gotoxy(2 * j, i);
-
-					TextColor(bg_l[i][x + j], bg_l[i][x + j]);
-					printf("■");
-					//drawBackBuffer(i, j,"■");
-
-				}
-				//render();
-				cout << endl;
-			}
-			gotoxy(1, 1);
-			TextColor(0, bg_l[1][1]);
-			printf(" ESC : 인벤토리");
-
-			TextColor(15, 0);
-		}
-		else
-		{
-			for (int i = 0; i < 40; i++)
-			{
-				for (int j = 0; j < 45; j++)
-				{
-					gotoxy(2 * j, i);
-
-					TextColor(bg[i][x + j], bg[i][x + j]);
-					printf("■");
-					//drawBackBuffer(i, j,"■");
-
-				}
-				//render();
-				cout << endl;
-			}
-			gotoxy(1, 1);
-			TextColor(0, bg[1][1]);
-			printf(" ESC : 인벤토리");
-
-			TextColor(15, 0);
-		}		
-	}
-
-	int getPixelColor(int roomNum, int x, int y)
-	{
-		if (roomNum == 1)
-			return room_first[x][y];
-		else if (roomNum == 2)
-			return room_second[x][y];
-		else
-			return room_third[x][y];
-	}
-	
+	// 방 출력
+	void showBg(int roomNum, int x);
+	int getPixelColor(int roomNum, int x, int y);
 };

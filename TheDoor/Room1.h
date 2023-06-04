@@ -4,7 +4,7 @@
 class Room1
 {
 private:
-	int room1_minigame1[30][30] = {
+	int maze[30][30] = {
 		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
 		6,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,6,
 		6,14,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,14,6,
@@ -37,7 +37,7 @@ private:
 		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
 	};
 
-	int room1_minigame1_clear[30][30] = {
+	int mazeClear[30][30] = {
 		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
 		6,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,6,
 		6,14,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,14,6,
@@ -70,7 +70,7 @@ private:
 		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
 	};
 
-	int room1_minigame2[30][30] = {
+	int statue[30][30] = {
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 		0,0,0,0,0,0,0,0,0,0,0,0,7,7,15,7,7,7,0,0,0,0,0,0,0,0,0,0,0,0,
 		0,0,0,0,0,0,0,0,0,0,15,7,15,15,7,7,7,7,7,0,0,0,0,0,0,0,0,0,0,0,
@@ -139,64 +139,21 @@ private:
 	int password[4] = { 1, 7, 1, 9 };
 
 public:
-	void showMaze()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(room1_minigame1[i][j], room1_minigame1[i][j]);
-				printf("■");
-				//drawBackBuffer(3 + i, 14 + 2 * j, "■");
-			}
-		}
-		gotoxy(16, 4);
-		TextColor(0, 14);
-		printf(" r : reset");
-	}
-	void showClue1()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(room1_minigame1_clear[i][j], room1_minigame1_clear[i][j]);
-				printf("■");
-				//drawBackBuffer(3 + i, 14 + 2 * j, "■");
-			}
-		}
-	}
-	void showStatue()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(room1_minigame2[i][j], room1_minigame2[i][j]);
-				printf("■");
-				//drawBackBuffer(3 + i, 14 + 2 * j, "■");
-			}
-		}
-	}
+	Room1();
+	~Room1();
 
-	void showBox()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(box[i][j], box[i][j]);
-				printf("■");
-				//drawBackBuffer(3 + i, 14 + 2 * j, "■");
-			}
-		}
-	}
+	void showMaze();
+	void showClue();
+	void showStatue();
+	void showBox();
+
+	// 미로탈출 구현
+	int playMaze();
+	// 자물쇠의 비밀번호를 입력받는 함수
 	int insertPassword();
-	int miniGame1();
+	
+
+	// 미로를 깼는지 안깼는지 여부를 알기 위한 getter, setter
 	void setGameClear(bool clear) { gameClear = clear; }
 	bool getGameClear() { return gameClear; }
 };

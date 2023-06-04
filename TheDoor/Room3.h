@@ -157,8 +157,11 @@ private:
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
+	// 정답 암호
 	const char* password = "close";
+	// 아케이드 게임 총알의 위치를 받는 구조체 배열
 	Bullet bullet[20];
+	// note에 출력할 문장
 	char noter[5][MAXCHAR] = { "올해는 가장 어두운 *크리스마스가 되겠군 ", "*생명은 소중하고 *기회는 언제나 공평하지 ",
 		"지금 내리는 *눈을 두 *눈으로 볼 수 없다면 ", "어떤 기분일지 상상해봤나? ", "- Dr.Jo " };
 	
@@ -166,94 +169,15 @@ public:
 	Room3();
 	~Room3();
 
-	void showArcade()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(arcade[i][j], arcade[i][j]);
-				printf("■");
-			}
-		}
-		gotoxy(44, 4);
-		TextColor(0, 7);
-		printf("SPACE: 공격, ← →: 방향키");
-	}
+	void showArcade();
+	void showEnemy(int num, int x = 20);
+	void showPlayer(int num, int x = 20);
+	void showClear();
+	void showLocker();
+	void showNote();
 
-	void showEnemy(int num, int x = 20)
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			for (int j = 0; j < 9; j++)
-			{
-				gotoxy(x + j * 2, 7 + i);
-				TextColor(enemy[num][i][j], enemy[num][i][j]);
-				printf("■");
-			}
-		}
-	}
-
-	void showPlayer(int num, int x = 20)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				gotoxy(x + j * 2, 22 + i);
-				TextColor(player[num][i][j], player[num][i][j]);
-				printf("■");
-			}
-		}
-	}
-
-	void showClear()
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			for (int j = 0; j < 22; j++)
-			{
-				gotoxy(22 + j * 2, 12 + i);
-				TextColor(clear[i][j], clear[i][j]);
-				printf("■");
-			}
-		}
-	}
-
-	void showLocker()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(locker[i][j], locker[i][j]);
-				printf("■");
-			}
-		}
-	}
-
-	void showNote()
-	{
-		for (int i = 0; i < 30; i++)
-		{
-			for (int j = 0; j < 30; j++)
-			{
-				gotoxy(14 + j * 2, 3 + i);
-				TextColor(note[i][j], note[i][j]);
-				printf("■");
-			}
-		}
-
-		for (int i = 0; i < 5; i++)
-		{
-			gotoxy(24, 10 + 3 * i);
-			TextColor(0, 14);
-			printf("%s", noter[i]);
-		}
-	}
-
+	// 아케이드 구현
 	int playArcade();
+	// 암호를 입력받는 함수
 	int insertPassword();
 };

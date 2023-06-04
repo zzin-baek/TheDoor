@@ -1,14 +1,42 @@
-#include "StartScreen.h"
+#include "gameScreen.h"
 
-StartScreen::StartScreen()
+gameScreen::gameScreen()
 {
 }
 
-StartScreen::~StartScreen()
+gameScreen::~gameScreen()
 {
 }
-
-void StartScreen::printIntro()
+// 시작화면 출력
+void gameScreen::showStartScreen()
+{
+	for (int i = 0; i < 40; i++)
+	{
+		for (int j = 0; j < 45; j++)
+		{
+			gotoxy(2 * j, i);
+			TextColor(startScreen[i][j], startScreen[i][j]);
+			printf("■");
+		}
+	}
+	TextColor(15, 0);
+}
+// 엔딩화면 출력
+void gameScreen::showEndingScreen()
+{
+	for (int i = 0; i < 40; i++)
+	{
+		for (int j = 0; j < 45; j++)
+		{
+			gotoxy(2 * j, i);
+			TextColor(endingScreen[i][j], endingScreen[i][j]);
+			printf("■");
+		}
+	}
+	TextColor(0, 0);
+}
+// 시작 나레이션 한글자씩 출력
+void gameScreen::printIntro()
 {
 	PlaySound(TEXT("./BGM/키보드.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int introX = 8;
@@ -18,6 +46,7 @@ void StartScreen::printIntro()
 	{
 		for (int j = 0; j < strlen(intro[i]); j++)
 		{
+			// 아무 키나 입력하면 빠르게 출력
 			if (_kbhit())
 				Sleep(5);
 			else
@@ -31,7 +60,7 @@ void StartScreen::printIntro()
 			}
 			else introX++;
 
-			cout << intro[i][j];			
+			cout << intro[i][j];
 		}
 		introY += 3;
 		introX = 8;
@@ -40,8 +69,8 @@ void StartScreen::printIntro()
 	cout << endl;
 	Sleep(3000);
 }
-
-void StartScreen::printOutro()
+// 엔딩 나레이션 출력
+void gameScreen::printOutro()
 {
 	PlaySound(TEXT("./BGM/키보드.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int outroX = 8;
@@ -59,14 +88,9 @@ void StartScreen::printOutro()
 				outroX = 9;
 				outroY += 3;
 			}
-			else if (sizeof(outro[i][j]) > 1)
-				outroX += 2;
 			else outroX++;
 
 			cout << outro[i][j];
-
-
-
 		}
 		outroY += 3;
 		outroX = 8;

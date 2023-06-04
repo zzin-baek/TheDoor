@@ -42,69 +42,27 @@ private:
 		-1,-1,0,7,7,0,-1,0,0,0,-1,-1,
 	};
 
-	int _posX;
-	int _posY;
+	int _posX, _posY;
+	// 걷는 모습을 바꾸기 위한 함수
 	bool walk = false;
 
-	BackGround* bg = new BackGround;
+	// 캐릭터 형체 이외의 배열을 처리하기 위해 배경 클래스 생성
+	BackGround* bg;
 
 public:
 	Charactor();
 	~Charactor();
 
-	void showChar_front(int roomNum, int x)
-	{
-		int charactor[15][12];
-		if (walk)
-			memcpy(charactor, charactor_1, sizeof(charactor_1));
-		else
-			memcpy(charactor, charactor_2, sizeof(charactor_2));
+	// 앞, 뒤로 걸어가는 캐릭터 출력을 위한 함수
+	void showChar_front(int roomNum, int x);
+	void showChar_back(int roomNum, int x);
 
-		for (int i = 0; i < 15; i++)
-		{
-			for (int j = 0; j < 12; j++)
-			{
-				gotoxy(_posX + 2 * j, _posY + i);
-				if (charactor[i][j] < 0)
-					TextColor(bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2));
-				else TextColor(charactor[i][j], charactor[i][j]);
-				
-				printf("■");
-				//drawBackBuffer(i, j, "■");render(_posX, _posY);
-			}
-			
-		}
-		TextColor(15, 0);
-	}
-	void showChar_back(int roomNum, int x)
-	{
-		int charactor[15][12];
-		if (walk)
-			memcpy(charactor, charactor_1, sizeof(charactor_1));
-		else
-			memcpy(charactor, charactor_2, sizeof(charactor_2));
-
-		for (int i = 0; i < 15; i++)
-		{
-			for (int j = 0; j < 12; j++)
-			{
-				gotoxy(_posX + 2 * j, _posY + i);
-				if (charactor[i][11 - j] < 0)
-					TextColor(bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2), bg->getPixelColor(roomNum, _posY + i, x + (_posX + 2 * j) / 2));
-				else TextColor(charactor[i][11-j], charactor[i][11-j]);
-				printf("■");
-				//drawBackBuffer(i, j, "■");render(_posX, _posY);
-				
-			}
-			
-		}
-		TextColor(15, 0);
-	}
-
+	// 캐릭터의 위치를 변경하고 알기 위한 getter, setter
 	void setXY(int x, int y) { _posX = x; _posY = y; }
 	int getX() { return _posX; }
 	int getY() { return _posY; }
 
+	// 걷는 모습을 바꾸기 위한 함수
 	void setWalk(bool w) { walk = w; }
 	bool getWalk() { return walk; }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "header.h"
 
+// 아이템의 이름과 특징을 저장하기 위한 구조체
 struct itemInfo
 {
 	int itemNum;
@@ -81,39 +82,15 @@ private:
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
+	// 아이템 구조체 배열 생성
 	itemInfo items[4];
 
 public:
 	Item();
 	~Item();
 
+	// 아이템 정보를 반환하기 위한 함수
 	itemInfo* getItem() { return items; }
-	void showItem(int num)
-	{
-		int items[15][15];
-		switch (num)
-		{
-		case 1:
-			memcpy(items, key1, sizeof(key1));
-			break;
-		case 2:
-			memcpy(items, key2, sizeof(key2));
-			break;
-		case 3:
-			memcpy(items, key3, sizeof(key3));
-			break;
-		case 4:
-			memcpy(items, vaccine, sizeof(vaccine));
-			break;
-		}
-
-		for (int i = 0; i < 15; i++)
-			for (int j = 0; j < 15; j++)
-			{
-				gotoxy(34 + 2 * j, 8 + i);
-				TextColor(items[i][j], items[i][j]);
-				printf("■");
-			}
-	}
+	void showItem(int num);
 };
 

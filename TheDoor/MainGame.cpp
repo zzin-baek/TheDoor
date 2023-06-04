@@ -1,12 +1,10 @@
 #include "MainGame.h"
 
-stConsole console;
-
 MainGame::MainGame()
 {
 	bg = new BackGround;
 	ch = new Charactor;
-	ss = new StartScreen;
+	ss = new gameScreen;
 
 	room1 = new Room1;
 	room2 = new Room2;
@@ -26,16 +24,12 @@ MainGame::~MainGame()
 	delete room3;
 	delete inven;
 	delete item;
-
 }
 
+// 게임 시작을 위한 콘솔 창 크기 설정과 커서 안보임 설정
 void MainGame::init()
 {
-	initConsole();
 	system("mode con: cols=90 lines=45 | title 더 도어 ");
-
-	console.hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	console.nCurBuffer = 0;
 
 	// 콘솔 관련 설정
 	CONSOLE_SCREEN_BUFFER_INFO consoleInfo{ 0, };
@@ -44,17 +38,14 @@ void MainGame::init()
 	cursorInfo.bVisible = 0; // 커서를 보일지 말지 결정(0이면 안보임, 0제외 숫자 값이면 보임)
 	cursorInfo.dwSize = 1; // 커서의 크기를 결정 (1~100 사이만 가능)
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-
-	// 콘솔의 크기를 다시 계산 (나중에 그림 그릴때 사용)
-	console.rtConsole.nWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
-	console.rtConsole.nHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
-
 }
 
+// 시작화면 출력
 int MainGame::mainMenu()
 {
 	PlaySound(TEXT("./BGM/시작.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ss->showStartScreen();
+
 	gotoxy(40, 35);
 	printf("게임 시작");
 	gotoxy(40, 37);
@@ -64,6 +55,7 @@ int MainGame::mainMenu()
 
 	int cursor = 35;
 
+	// 게임을 시작할지 종료할지 선택
 	while (!_kbhit())
 	{
 		int key = _getch();
@@ -101,19 +93,22 @@ int MainGame::mainMenu()
 void MainGame::mainScript()
 {
 	system("cls");
-	ss->printIntro();		
+	ss->printIntro();
 }
 
+// 첫 번째 스테이지
 void MainGame::stageOne()
 {
 	PlaySound(TEXT("./BGM/방1.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int x = 0;
+	// 걸어가는 모션 속도 조절을 위한 변수
 	int walkSpeed = 0;
+	// 상자가 열렸는지 확인하기 위한 변수
 	int unlock = false;
 
-	ClearScreen();
+	system("cls");
 	ch->setXY(15, 25);
-	bg->showBg(1, x, 0);
+	bg->showBg(1, x);
 	ch->showChar_front(1, x);
 
 	while (1)
@@ -122,33 +117,37 @@ void MainGame::stageOne()
 		{
 			int key = _getch();
 
+			// 방향키(좌, 우) 입력 받았을 때
 			if (key == 224)
 			{
 				walkSpeed++;
 				key = _getch();
+				// 오른쪽(앞)으로 갈 때 움직임
 				if (key == RIGHT)
 				{
+					// 캐릭터의 위치에 따라 배경을 움직일지 캐릭터를 움직일지 선택
 					if (ch->getX() > 65)
 						continue;
 					else if (ch->getX() > 75)
-						ch->setXY(ch->getX() + 1, ch->getY());		
+						ch->setXY(ch->getX() + 2, ch->getY());		
 					else if (x > 74)
-						ch->setXY(ch->getX() + 1, ch->getY());			
+						ch->setXY(ch->getX() + 2, ch->getY());			
 					else if (ch->getX() > 30)
 						x += 1;
 					else
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 
+					// 걷는 모션 변경
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
 					
-					bg->showBg(1, x, 0);
+					bg->showBg(1, x);
 					ch->showChar_front(1, x);
-
 				}
+				// 왼쪽(뒤)로 갈 때 움직임
 				else if (key == LEFT)
 				{
-					if (ch->getX() < 0)
+					if (ch->getX() < 1)
 						continue;
 					else if (ch->getX() > 30)
 						ch->setXY(ch->getX() - 1, ch->getY());
@@ -161,20 +160,23 @@ void MainGame::stageOne()
 					
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
-					bg->showBg(1, x, 0);
+
+					bg->showBg(1, x);
 					ch->showChar_back(1, x);
 				}
 			}
+			// 상호작용 키를 눌렀을 때 처리
 			else if (key == 32)
 			{
 				if (x > 5 && x < 13)
 				{
+					// 미로를 탈출 했을 때와 안했을 때
 					if (room1->getGameClear())
-						room1->showClue1();
+						room1->showClue();
 					else
 					{
 						room1->showMaze();
-						if (room1->miniGame1())
+						if (room1->playMaze())
 						{
 							room1->setGameClear(true);
 							message("그림이 바뀌었다…");
@@ -198,29 +200,34 @@ void MainGame::stageOne()
 						gotoxy(72, 36);
 						printf("HINT : 숫자");
 
+						// 비밀번호를 맞췄을 때 출력
 						if (room1->insertPassword())
 						{
 							message("자물쇠가 열렸다");
 							Sleep(2000);
 							message("열쇠를 얻었다");
 							Sleep(2000);
+							// 열쇠를 인벤토리에 추가
 							inven->addItem(item->getItem()[0]);
 							inven->setHasKey(true);
 							unlock = true;
-							bg->showBg(1, x, 0);
+
+							bg->showBg(1, x);
 							ch->showChar_front(1, x);
 						}
 						else
 						{
 							message("아무 일도 일어나지 않았다…");
 							Sleep(2000);
-							bg->showBg(1, x, 0);
+
+							bg->showBg(1, x);
 							ch->showChar_front(1, x);
 						}
 					}
 				}
 				else if (ch->getX() > 60 && ch->getX() < 65)
 				{
+					// 키의 소지 여부에 따른 행동
 					if (inven->getHasKey())
 					{
 						message("열쇠를 사용하여 문을 열까? (Y: 예 / N: 아니오)");
@@ -233,36 +240,39 @@ void MainGame::stageOne()
 								PlaySound(NULL, 0, 0);
 								PlaySound(TEXT("./BGM/문.wav"), NULL, SND_ASYNC);
 								Sleep(1000);
+
+								// 아이템을 사용 (인벤토리에서 빠진다)
 								inven->useItem();
 								inven->setHasKey(false);
-								
-								
+			
 								return;
 							}
 							else if (key == 78 || key == 110)
 							{
-								bg->showBg(1, x, 0);
+								bg->showBg(1, x);
 								ch->showChar_front(1, x);
 								break;
 							}
 						}
-						continue;
 					}
 					else
 					{
 						message("열쇠가 필요한 것 같다…");
 						Sleep(2000);
-						bg->showBg(1, x, 0);
+
+						bg->showBg(1, x);
 						ch->showChar_front(1, x);
 					}
 				}
 			}
 			else if (key == 27)
 			{
-				ClearScreen();
+				// 인벤토리 창 출력
 				inven->invenUI();
+				// 인벤토리에 아이템이 있을 경우
 				if (inven->getSize() > 0)
 				{
+					// 아이템과 아이템의 정보를 출력
 					item->showItem(inven->getItemNum().itemNum);
 					gotoxy(30, 7);
 					TextColor(15, 0);
@@ -273,27 +283,26 @@ void MainGame::stageOne()
 				key = _getch();
 				if (key == 27)
 				{
-					bg->showBg(1, x, 0);
+					bg->showBg(1, x);
 					ch->showChar_front(1, x);
 				}
 			}
 		}
 	}
 }
-
+// 두 번째 스테이지
 void MainGame::stageTwo()
 {
 	PlaySound(TEXT("./BGM/방2.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	int x = 0;
 	int walkSpeed = 0;
-	int rulletReturn[3] = { 1, 1, 1 };
+	// 룰렛을 클리어 했는지에 대한 여부
 	bool clear = false;
 	
-	ClearScreen();
-	
+	system("cls");
 	ch->setXY(15, 25);
-	bg->showBg(2, x, 0);
+	bg->showBg(2, x);
 	ch->showChar_front(2, x);
 	
 	while (1)
@@ -301,7 +310,6 @@ void MainGame::stageTwo()
 		if (_kbhit())
 		{
 			int key = _getch();
-
 			if (key == 224)
 			{
 				walkSpeed++;
@@ -311,23 +319,24 @@ void MainGame::stageTwo()
 					if (ch->getX() > 65)
 						continue;
 					else if (ch->getX() > 75)
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 					else if (x > 74)
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 					else if (ch->getX() > 30)
 						x += 1;
 					else
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
-					bg->showBg(2, x, 0);
+
+					bg->showBg(2, x);
 					ch->showChar_front(2, x);
 
 				}
 				else if (key == LEFT)
 				{
-					if (ch->getX() < 0)
+					if (ch->getX() < 1)
 						continue;
 					else if (ch->getX() > 30)
 						ch->setXY(ch->getX() - 1, ch->getY());
@@ -340,10 +349,12 @@ void MainGame::stageTwo()
 
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
-					bg->showBg(2, x, 0);
+
+					bg->showBg(2, x);
 					ch->showChar_back(2, x);
 				}
 			}
+			// 상호작용 키 입력 시
 			else if (key == 32)
 			{
 				if (x > 11 && x < 15)
@@ -370,7 +381,7 @@ void MainGame::stageTwo()
 							Sleep(2000);
 							inven->addItem(item->getItem()[1]);
 							inven->setHasKey(true);
-							bg->showBg(2, x, 0);
+							bg->showBg(2, x);
 							ch->showChar_front(2, x);
 							continue;
 						}
@@ -378,13 +389,14 @@ void MainGame::stageTwo()
 						{
 							message("아무 일도 일어나지 않았다…");
 							Sleep(2000);
-							bg->showBg(2, x, 0);
+							bg->showBg(2, x);
 							ch->showChar_front(2, x);
 						}
 					}
 				}
 				else if (ch->getX() > 60 && ch->getX() < 65)
 				{
+					// 열쇠 소지 여부에 따른 행동
 					if (inven->getHasKey())
 					{
 						message("열쇠를 사용하여 문을 열까? (Y: 예 / N: 아니오)");
@@ -394,35 +406,34 @@ void MainGame::stageTwo()
 							if (key == 89 || key == 121)
 							{
 								message("열쇠를 사용하여 문을 열었다");
+
 								inven->useItem();
 								inven->setHasKey(false);
+
 								PlaySound(NULL, 0, 0);
 								PlaySound(TEXT("./BGM/문.wav"), NULL, SND_ASYNC);
 								Sleep(1000);
-								
 								return;
 							}
 							else if (key == 78 || key == 110)
 							{
-								bg->showBg(2, x, 0);
+								bg->showBg(2, x);
 								ch->showChar_front(2, x);
 								break;
 							}
 						}
-						continue;
 					}
 					else
 					{
 						message("열쇠가 필요한 것 같다…");
 						Sleep(2000);
-						bg->showBg(2, x, 0);
+						bg->showBg(2, x);
 						ch->showChar_front(2, x);
 					}
 				}
 			}
 			else if (key == 27)
 			{
-				ClearScreen();
 				inven->invenUI();
 				if (inven->getSize() > 0)
 				{
@@ -436,27 +447,28 @@ void MainGame::stageTwo()
 				key = _getch();
 				if (key == 27)
 				{
-					bg->showBg(2, x, 0);
+					bg->showBg(2, x);
 					ch->showChar_front(2, x);
 				}
 			}
 		}
 	}
 }
-
+// 세 번째 스테이지
 void MainGame::stageThree()
 {
 	PlaySound(TEXT("./BGM/방3.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	int x = 0;
 	int walkSpeed = 0;
+	// 아케이드 게임 클리어 여부
 	bool gameClear = false;
+	// 금고 오픈 여부
 	bool boxOpen = false;
 
-	ClearScreen();
-	
+	system("cls");
 	ch->setXY(15, 25);
-	bg->showBg(3, x, 0);
+	bg->showBg(3, x);
 	ch->showChar_front(3, x);
 
 	while (1)
@@ -464,7 +476,6 @@ void MainGame::stageThree()
 		if (_kbhit())
 		{
 			int key = _getch();
-
 			if (key == 224)
 			{
 				walkSpeed++;
@@ -474,21 +485,21 @@ void MainGame::stageThree()
 					if (ch->getX() > 65)
 						continue;
 					else if (x > 54)
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 					else if (ch->getX() > 30)
 						x += 1;
 					else
-						ch->setXY(ch->getX() + 1, ch->getY());
+						ch->setXY(ch->getX() + 2, ch->getY());
 
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
-					bg->showBg(3, x, 0);
-					ch->showChar_front(3, x);
 
+					bg->showBg(3, x);
+					ch->showChar_front(3, x);
 				}
 				else if (key == LEFT)
 				{
-					if (ch->getX() < 0)
+					if (ch->getX() < 1)
 						continue;
 					else if (ch->getX() > 30)
 						ch->setXY(ch->getX() - 1, ch->getY());
@@ -501,7 +512,8 @@ void MainGame::stageThree()
 
 					if (walkSpeed % 5 == 0)
 						ch->setWalk(!ch->getWalk());
-					bg->showBg(3, x, 0);
+
+					bg->showBg(3, x);
 					ch->showChar_back(3, x);
 				}
 			}
@@ -519,17 +531,20 @@ void MainGame::stageThree()
 					{
 						if (room3->playArcade())
 						{
+							message("게임기에서 열쇠가 떨어졌다…");
+							// 인벤토리에 열쇠 추가
 							inven->addItem(item->getItem()[2]);
 							inven->setHasKey(true);
-							message("게임기에서 열쇠가 떨어졌다…");
 							Sleep(2000);
+
 							gameClear = true;
-							bg->showBg(3, x, 0);
+
+							bg->showBg(3, x);
 							ch->showChar_front(3, x);
 						}
 						else
 						{
-							bg->showBg(3, x, 0);
+							bg->showBg(3, x);
 							ch->showChar_front(3, x);
 						}
 					}
@@ -541,7 +556,7 @@ void MainGame::stageThree()
 						room3->showNote();
 						if (_getch() == 27)
 						{
-							bg->showBg(3, x, 0);
+							bg->showBg(3, x);
 							ch->showChar_front(3, x);
 						}
 					}
@@ -551,12 +566,14 @@ void MainGame::stageThree()
 						if (inven->getHasKey())
 						{
 							message("열쇠를 사용하여 상자를 열었다");
+							// 인벤토리에서 열쇠 삭제
 							inven->useItem();
 							inven->setHasKey(false);
 							Sleep(2000);
 							
 							room3->showNote();
 							message("백신과 쪽지를 발견했다");
+							// 인벤토리에 백신 추가
 							inven->addItem(item->getItem()[3]);
 							boxOpen = true;
 							continue;
@@ -565,7 +582,8 @@ void MainGame::stageThree()
 						{
 							message("열쇠가 필요할 것 같다…");
 							Sleep(2000);
-							bg->showBg(3, x, 0);
+
+							bg->showBg(3, x);
 							ch->showChar_front(3, x);
 						}
 					}
@@ -576,6 +594,7 @@ void MainGame::stageThree()
 					gotoxy(72, 36);
 					printf("HINT : 영어");
 
+					// 암호의 정답 여부에 따른 행동
 					if (room3->insertPassword())
 					{
 						message("문이 열렸다");
@@ -589,15 +608,14 @@ void MainGame::stageThree()
 					{
 						message("아무 일도 일어나지 않았다…");
 						Sleep(2000);
-						bg->showBg(3, x, 0);
+
+						bg->showBg(3, x);
 						ch->showChar_front(3, x);
 					}
 				}
-
 			}
 			else if (key == 27)
 			{
-				ClearScreen();
 				inven->invenUI();
 				if (inven->getSize() > 0)
 				{
@@ -611,14 +629,14 @@ void MainGame::stageThree()
 				key = _getch();
 				if (key == 27)
 				{
-					bg->showBg(3, x, 0);
+					bg->showBg(3, x);
 					ch->showChar_front(3, x);
 				}
 			}
 		}
 	}
 }
-
+// 입력받은 문장과 함께 메시지 창을 출력
 void MainGame::message(std::string str)
 {
 	for (int i = 0; i < 8; i++)
@@ -627,11 +645,11 @@ void MainGame::message(std::string str)
 		TextColor(15, 0);
 		printf("%s", msg[i]);
 	}
-
 	gotoxy(10, 33);
 	printf("%s", str.c_str());
 }
 
+// 본격적인 게임 시작
 void MainGame::gameStart()
 {
 	stageOne();
@@ -641,6 +659,7 @@ void MainGame::gameStart()
 	ending();
 }
 
+// 엔딩 나레이션 및 화면 출력
 void MainGame::ending()
 {
 	system("cls");
@@ -648,24 +667,14 @@ void MainGame::ending()
 	PlaySound(TEXT("./BGM/엔딩.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ss->showEndingScreen();
 
+	// 아무 키나 입력받으면 종료
 	while (!_kbhit())
 	{
 		int key = _getch();
 		if (key > 0)
 			break;
 	}
-	
-}
 
-void MainGame::ClearScreen()
-{
-	COORD pos{ 0, };
-	DWORD dwWritten = 0;
-	unsigned size = console.rtConsole.nWidth * console.rtConsole.nHeight;
-
-	// 콘솔 화면 전체를 띄어쓰기를 넣어 빈 화면처럼 만듭니다.
-	FillConsoleOutputCharacter(console.hConsole, ' ', size, pos, &dwWritten);
-	SetConsoleCursorPosition(console.hConsole, pos);
 }
 
 void TextColor(int font, int backGround)

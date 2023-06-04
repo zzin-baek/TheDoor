@@ -1,7 +1,7 @@
 #pragma once
 #include "header.h"
 
-class StartScreen
+class gameScreen
 {
 private:
 	int startScreen[40][45] = {
@@ -90,6 +90,7 @@ private:
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
+	// 인트로와 아웃트로 내용 저장
 	char intro[7][MAXCHAR] = { "어느 크리스마스, 인류의 절반이 원인 불명으로 눈이 멀어버렸다. ", "전염병은 무서운 속도로 퍼져나갔고, 인류의 90 % 가 앞을 볼 수 없게 되었다. ",
 		"경일 연구원에서 백신 개발에 매달린 지 4년… ", "함께 개발하던 조 박사님께 백신을 드디어 개발했다는 연락을 마지막으로 박사님과의 연락이 두절되었다. ",
 		"박사님도 결국 감염되신건가… ", "이렇게 된 이상 백신을 찾으러 박사님의 저택에 가는 수 밖에… " };
@@ -98,36 +99,11 @@ private:
 		"그 저택에 있던 수 많은 장치들은 과연 무었이었을까…? " };
 
 public:
-	StartScreen();
-	~StartScreen();
+	gameScreen();
+	~gameScreen();
 
-	void showStartScreen()
-	{
-		for (int i = 0; i < 40; i++)
-		{
-			for (int j = 0; j < 45; j++)
-			{
-				gotoxy(2 * j, i);
-				TextColor(startScreen[i][j], startScreen[i][j]);
-				printf("■");
-			}
-		}
-		TextColor(15, 0);
-	}
-
-	void showEndingScreen()
-	{
-		for (int i = 0; i < 40; i++)
-		{
-			for (int j = 0; j < 45; j++)
-			{
-				gotoxy(2 * j, i);
-				TextColor(endingScreen[i][j], endingScreen[i][j]);
-				printf("■");
-			}
-		}
-		TextColor(15, 0);
-	}
+	void showStartScreen();
+	void showEndingScreen();
 
 	void printIntro();
 	void printOutro();
